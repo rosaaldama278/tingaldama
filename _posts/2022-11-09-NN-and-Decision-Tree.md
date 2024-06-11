@@ -1,5 +1,5 @@
 ---
-title: "NN & Decisoin "
+title: "NN & Decisoin Tree"
 summary: Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data.
 date: 2022-11-09
 categories: 
@@ -33,7 +33,7 @@ The idea is to assign the label to the same label as its 'closest neighbor' for 
 
 ## Decision Tree
 
-Compared to the naive tree algorithm , the goal here is to select the feature and threshold that maximally reduces label uncertainty. Typically measured by criteria like Gini impurity, entrop.
+Compared to the naive tree algorithm , the goal here is to select the feature and threshold that maximally reduces label uncertainty. Typically measured by criteria like Gini impurity, Entropy
 
 Criterias to measure uncertainty in cell C:
 
