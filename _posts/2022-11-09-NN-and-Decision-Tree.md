@@ -1,6 +1,6 @@
 ---
-title: "NN & Decisoin Tree"
-summary: Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data.
+title: "NN & Decision Tree"
+summary: This post explores the concepts of Nearest Neighbors (k-NN) and Decision Tree algorithms, including their pros and cons, and how to measure uncertainty using Gini impurity and entropy. A detailed example is provided to illustrate the decision tree splitting process.
 date: 2022-11-09
 categories: 
 - Nearnest Neighbors
