@@ -1,0 +1,18 @@
+title: Tingaldama
+description: Midnight is a theme for GitHub Pages.
+show_downloads: true
+google_analytics:
+baseurl: /tingaldama
+theme: jekyll-theme-midnight
+image: /assets/images/img_avatar.png
+favicon: /assets/images/favicon.jpg
+
+# Defaults
+defaults:
+  - scope:
+      path: "" # an empty string here means all files in the project
+      type: "posts"
+    values:
+      layout: "post"
+
+excerpt_separator: <!--more-->

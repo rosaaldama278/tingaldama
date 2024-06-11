@@ -1,0 +1,81 @@
+<style>
+.contact-container {
+    max-width: 600px;
+    margin: 50px auto;
+    margin-top: 100px;
+    padding: 20px;
+    background-color: transparent;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.contact-container h1 {
+    text-align: center;
+    color: white;
+}
+
+.contact-container p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.contact-container a {
+    color: #0073e6;
+    text-decoration: none;
+}
+
+.contact-container a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact-container {
+        padding: 15px;
+        margin: 30px 15px;
+        margin-top: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-container {
+        padding: 10px;
+        margin: 20px 10px;
+        margin-top: 80px;
+    }
+
+    .contact-container p {
+        font-size: 1em;
+    }
+}
+</style>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{% seo %}
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="{{ '/assets/js/respond.js' | relative_url }}"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="{{ '/assets/css/ie.css' | relative_url }}">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    {% include head-custom.html %}
+  </head>
+  {% include header.html %}
+    <div class="contact-container">
+        <h1>Contact Me 🤝</h1>
+        <p>Have a burning question about my blog? 🔥 Or maybe you just want to chat about machine learning 🤖, life 🌍, the universe 🌌, and everything in between? Feel free to reach out!</p>
+        <p>You can drop me a line at <a href="mailto:tingaldama278@gmail.com">tingaldama278@gmail.com</a> 📧, and I'll get back to you as soon as possible. Your thoughts, ideas, and feedback are always welcome!</p>
+        <p>📍 Location: San Jose, CA 95134</p>
+        <p>Let's connect and delve into the fascinating world of machine learning and beyond! 🚀</p>
+    </div>
+    {% include footer.html %}
+

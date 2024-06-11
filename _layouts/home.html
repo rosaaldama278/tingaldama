@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{% seo %}
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="{{ '/assets/js/respond.js' | relative_url }}"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="{{ '/assets/css/ie.css' | relative_url }}">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    {% include head-custom.html %}
+  </head>
+  <body>
+    <style>
+        .button-blog{
+            color: white;
+            border: 1px solid grey;
+            border-radius: 3px;
+            width: 100px;
+            height: 30px;
+            background-color: transparent;
+            margin-top: 10px;
+        }
+        .button-blog:hover{
+            background-color: rgb(39, 38, 38);
+        }
+
+    .categories{
+  font-weight: bold;
+  color: #949494;
+}
+.date{
+  font-weight: bold !important;
+  color: #949494 !important;
+}
+.container-content{
+    max-width: 650px;
+    padding: 30px 0px 20px 0px !important;
+    margin: 20px 0;
+    margin-top: 75px;
+}
+    </style>
+    {% include header.html %}
+    <div class="wrapper">
+
+      <section class="container-content">
+        
+
+        {{ content }}
+
+      </section>
+      <h3>List of my blogs</h3>
+      <br>
+      <ul>
+        {% for post in site.posts %}
+          <li>
+           <h2> <a href="{{site.baseurl}}/{{ post.url }}">{{ post.title }}</a></h2>
+           <p class="date">Date: {{ post.date | date: "%B %d, %Y" }}</p>
+           <p class="categories">
+            Categories: {{ post.categories | join: " | " }}
+           </p>
+           <h4>{{ post.summary | truncate: 200}}</h4>
+            
+            <br>
+            
+            <a href="{{site.baseurl}}{{post.url}}"><button class="button-blog"> Read more</button></a>
+          </li>
+          <br>
+          <hr>
+        {% endfor %}
+      </ul>
+      <div id="title" style="text-align: center;">
+    
+        
+        <span class="credits left">Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+        <br>
+        <br>
+        <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="{{site.twitter}}">{{ site.github.owner_name }}</a></span>
+    
+        <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>
