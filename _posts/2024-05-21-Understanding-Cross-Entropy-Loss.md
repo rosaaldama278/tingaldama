@@ -1,11 +1,11 @@
 ---
 title: "Introduction to Cross Entropy Loss"
 date: 2024-05-21
-categories:
-   - entropy
-summary: Entropy originated in the field of thermodynamics and was later adapted to information theory by Claude Shannon. Its used to measure **uncertainty or unpredictability**in a system.
+summary: How does cross entropy loss work with an language model example
+categories: 
+-cross-entropy-loss
+-language-model
 ---
-
 Entropy originated in the field of thermodynamics and was later adapted to information theory by Claude Shannon. Its used to measure **uncertainty or unpredictability**in a system.
 
 Before this, there was no formal way to **quantify the information** needed to describe a system’s state. You might wonder if this ‘uncertainty’ is the same as the uncertainty we experience in daily life, like being unsure if someone will come to dinner. It’s similar but not the same…

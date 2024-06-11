@@ -1,14 +1,14 @@
 ---
 title: "How Does BPE Tokenization Work"
-date: 2024-05-28
+date: 2023-03-23
+summary: Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units.
 categories:
    - tokenization
-summary: Before we dive into BPE algorithm, lets take a look at Tokenization. Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units.
+   - BPE
 ---
-
 Before we dive into BPE algorithm, lets take a look at Tokenization. Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units.
 
-Other types of tokenization based on the level at which the text is split: 
+Other types of tokenization based on the level at which the text is split:
 
 1. Word Tokenization
 2. Character Tokenization
@@ -50,7 +50,7 @@ The results:
 * In each iteration, the tokenizer identifies the most frequent pair of adjacent characters and merges them into a single token.
 * The merging process continues until the desired vocabulary size is reached or a maximum number of iterations is performed.
 
-Lets go through an example: 
+Lets go through an example:
 
 In the previous intial tokens, we find that the most frequent pair: ('d', 'a')
 
@@ -115,7 +115,7 @@ How does the trained model tokenize new sentences
             return ''
     ```
 
-One example: 
+One example:
 
 In the previous example, the final vocab is: `[ 'day', 'e', 'c', 'a', 'h', 'r', 'T', 'y', 'is', 'o', 's', 'g', 'u', 'da']`
 

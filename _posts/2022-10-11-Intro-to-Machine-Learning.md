@@ -2,7 +2,7 @@
 title: "Intro to Machine Learning"
 summary: Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data.
 date: 2022-10-11
-categories: supervised-learning | Beyes classifier
+categories: supervised-learning
 ---
 ### What is Machine Learning?
 
@@ -76,19 +76,17 @@ Supervised Learning:
   $$
 - **Goal: It gives mostly correct predictions on unseen examples.**
 
-
 Unsupervised Learning:
+
 - **Data**:
 
   $$
   x_1, x_2, \ldots \in X
   $$
 - **Assumption:** There is underlying strcuture in the data
-
 - **Learning Task:** discover the structure given n examples from the data
-
 - **Goal:** find the summary of the data using the structure
-  
+
 ### **Statistical Modeling Approach for Supervised Learning:**
 
 - **Labeled Training Data:**
@@ -196,8 +194,12 @@ We want to classify emails as "spam" or "not spam" based on features like the pr
 
 The Bayes classifier aims to find the class y(spam or not spam) that maximizes the posterior probability
 
-$$P(Y = y \mid X = x)$$
-which is: 
+$$
+P(Y = y \mid X = x)
+$$
+
+which is:
+
 $$
 f(x) = \arg\max_{y \in \{ \text{spam, not spam} \}} P(Y = y \mid X = x)
 $$
@@ -239,8 +241,8 @@ $$
 $$
 P(X_i = 0 \mid Y = \text{spam}) = 1 - \theta_{i,\text{spam}}
 $$
-$\theta_{i,\text{spam}}$ that represents the probability of the word being present in a spam email
 
+$\theta_{i,\text{spam}}$ that represents the probability of the word being present in a spam email
 
 **MLE for Bernoulli Distribution**
 
@@ -278,7 +280,6 @@ $$
 \hat{\theta}_{i,\text{spam}} = \frac{\sum_{j=1}^{n} x_{ij}}{n}
 $$
 
-
 ##### **Step 3: Applying Bayes Classifier with MLE Estimates**
 
 Using the estimated probabilities:
@@ -294,7 +295,9 @@ P(X = x \mid Y = y) = \prod_{i=1}^{m} \hat{\theta}_{i,y}^{x_i} (1 - \hat{\theta}
 $$
 
 ##### **Step 4: Selecting the Predicted Label**
+
 Calculate the posterior probability for each class and select the class with the highest probability:
+
 $$
 \hat{y} = \arg\max_{y \in { \text{spam, not spam} }} \left( P(X = x_{\text{new}} \mid Y = y) \cdot P(Y = y) \right)
 $$

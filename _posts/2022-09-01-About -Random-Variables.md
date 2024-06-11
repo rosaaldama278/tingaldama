@@ -1,3 +1,8 @@
+title: "Random Variables"
+summary: Discrete and continous random variables, joint distribution and independence
+date: 2022-09-01
+categories: random variables
+
 ## Random Variables
 
 Suppose X represents some unknown quantity of interest, such as which way a dice will land when
@@ -24,7 +29,7 @@ Marginal Distribution
 The marginal distribution of a random variable is obtained by summing (or integrating, in the case of continuous variables) the joint distribution over all possible values of the other variable. For example, the marginal distribution of \( X \) is obtained by summing the joint distribution over all possible values of \( Y \):
 
 $$
-p(x) = \sum_y p(x, y) 
+p(x) = \sum_y p(x, y)
 $$
 
 which is also called sum rule
@@ -35,7 +40,6 @@ $$
 p(X = x, Y = y) = p(X = x) \cdot p(Y = y | X = x)
 $$
 
-
 By extending the product rule to \( D \) variables, we get the chain rule of probability:
 
 $$
@@ -43,8 +47,6 @@ p(x_{1:D}) = p(x_1) p(x_2 \mid x_1) p(x_3 \mid x_1, x_2) p(x_4 \mid x_1, x_2, x_
 $$
 
 ---
-
-
 
 ### Independence and Conditional Independence
 

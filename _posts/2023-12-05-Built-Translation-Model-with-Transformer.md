@@ -1,16 +1,14 @@
 ---
 title: "Step by Step to Build a Multi-Lingual Translation Language Model with Transformer"
 date: 2023-12-05
+summary: This guide provides a step-by-step tutorial on constructing a translation model using the Transformer architecture. We will code the encoder and decoder, train the model, save checkpoints, and perform inference. This post offers a comprehensive, hands-on approach to building a translation model with the Transformer.
 categories:
    - multi-lingual
-   - transformer 
-summary: In the "Attention is All You Need" paper, the authors introduced the self-attention mechanism within the encoder-decoder architecture for building translation models. This guide provides a step-by-step tutorial on constructing a translation model using the Transformer architecture. We will code the encoder and decoder, train the model, save checkpoints, and perform inference. This post offers a comprehensive, hands-on approach to building a translation model with the Transformer.
+   - transformer
 ---
-
-
 In the "Attention is All You Need" paper, the authors introduced the self-attention mechanism within the encoder-decoder architecture for building translation models. This guide provides a step-by-step tutorial on constructing a translation model using the Transformer architecture. We will code the encoder and decoder, train the model, save checkpoints, and perform inference. This post offers a comprehensive, hands-on approach to building a translation model with the Transformer.
 
-The transformer model architecture was proposed in the paper: 
+The transformer model architecture was proposed in the paper:
 
 ![Transformer Model]({{site.baseurl}}/assets/images/translation_model/transformer.png)
 
