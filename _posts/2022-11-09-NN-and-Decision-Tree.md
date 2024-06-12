@@ -10,7 +10,7 @@ categories:
 
 In my last post, i talked about doing classification via probablistic model. But a lot of time,  we don't know how to correctly model P[x|y].
 
-In this most, we take a look at a different apporach, which is to use disriminative models:
+In this post, we take a look at a different apporach, which is to use disriminative models:
 
 ### Nearest Neighbor (NN) classification
 
@@ -33,9 +33,18 @@ The idea is to assign the label to the same label as its 'closest neighbor' for 
 
 ## Decision Tree
 
-Compared to the naive tree algorithm , the goal here is to select the feature and threshold that maximally reduces label uncertainty. Typically measured by criteria like Gini impurity, Entropy
+A decision tree classifier works by recursively partitioning the data into subsets that are more **homogeneous** in terms of the target variable.
 
-Criterias to measure uncertainty in cell C:
+**Recursive Partitioning:** 
+
+* A decision tree splits the data into subsets based on the value of input features.
+* At each node in the tree, the algorithm selects the feature and threshold that results in the best split, meaning the split that most reduces uncertainty or impurity.
+
+**Uncertainty Reduction:**
+
+* The goal is to partition the data such that the resulting subsets (nodes) are as pure as possible, meaning they contain instances predominantly of a single class.
+
+**The metrics:**
 
 Gini Impurity: It measures the probability of a randomly chosen element being incorrectly classified if it was labeled according to the distribution of labels in the dataset.
 
@@ -47,6 +56,12 @@ Entropy: It measures the average amount of information needed to identify the cl
 
 $$
 u(C) = - \sum_{y \in \mathcal{Y}} p_y \log_2(p_y)
+$$
+
+Information Gain:
+
+$$
+IG(S, A) = H(S) - \sum_{t \in T} p(t) H(t) = H(S) - H(S|A)
 $$
 
 Classification error:
@@ -61,9 +76,45 @@ $$
 \arg \max_{F, T} \left[ u(C) - \left( p_L \cdot u(C_L) + p_R \cdot u(C_R) \right) \right]
 $$
 
+### Purning in Decision Tree
+
+Pruning is a technique used in decision tree algorithms to reduce overfitting and improve the model's generalization to unseen data. Overfitting occurs when a decision tree model becomes too complex and captures noise in the training data instead of the underlying pattern. Pruning simplifies the tree by removing parts that do not provide significant power to classify instances.
+
+Two tyeps of pruning: 
+
+* **Pre-pruning (Early Stopping)**
+* **Post-pruning (Pruning after Tree Construction)**
+
+### **ID3 (Iterative Dichotomiser 3)**
+
+ID3 (Iterative Dichotomiser 3) is an algorithm used to create decision trees. ID3 is the precursor to the [C4.5 algorithm](https://en.wikipedia.org/wiki/C4.5_algorithm "C4.5 algorithm"), and is typically used in the [machine learning](https://en.wikipedia.org/wiki/Machine_learning "Machine learning") and [natural language processing](https://en.wikipedia.org/wiki/Natural_language_processing "Natural language processing") domain.
+
+#### How it works: 
+
+**Initialization**:
+
+- Start with the entire dataset as the root of the tree.
+
+**Recursive Splitting**:
+
+- For each node, calculate the entropy of the dataset.
+- For each attribute, calculate the information gain if the dataset is split based on that attribute.
+- Select the attribute that provides the highest information gain and split the dataset based on this attribute.
+- Create child nodes for each subset of the dataset resulting from the split.
+- Repeat the process recursively for each child node, treating the subset of the dataset at each node as the new dataset.
+
+**Stopping Criteria**:
+
+- The recursion stops when one of the following conditions is met:
+  - All instances in the dataset at a node belong to the same class.
+  - There are no more attributes to split on.
+  - The dataset at a node is empty.
+
+ID3 follows a greedy approach, making locally optimal choices at each step by selecting the attribute that provides the highest information gain. This approach is computationally efficient and works well for many practical problems.
+
 ---
 
-Lets take a look at the example to see how it works:
+An example to illustate how it works if we split left and right cell of each iteration:
 
 | Feature 1 | Feature 2 | Class |
 | :-------: | --------- | ----- |
