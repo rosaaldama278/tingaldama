@@ -2,4 +2,4 @@
 layout: home
 title: Home
 ---
-# Welcome to My ML Blog! 🌟
+# Welcome to Ting Aldama's ML Blog! 🌟
