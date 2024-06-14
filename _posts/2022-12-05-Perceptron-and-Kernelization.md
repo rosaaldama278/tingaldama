@@ -44,7 +44,7 @@ $$
 
 Minimize the average misclassification error across all examples to find the weights.
 
-#### **The Perceptron Algorithm** :
+#### **The Perceptron Algorithm** 
 
 labelled training data:
 
@@ -101,16 +101,76 @@ $$
 
 The kernel method involves mapping data from its original space (which might be low-dimensional and non-linearly separable) to a higher-dimensional space where a linear decision boundary can separate the classes. This mapping is achieved through a function ϕ(x) which transforms the data points.  Algorithms capable of operating with kernels include the [kernel perceptron](https://en.wikipedia.org/wiki/Kernel_perceptron "Kernel perceptron"), support-vector machines (SVM), [Gaussian processes](https://en.wikipedia.org/wiki/Gaussian_process), [principal components analysis](https://en.wikipedia.org/wiki/Principal_components_analysis "Principal components analysis") (PCA), [canonical correlation analysis](https://en.wikipedia.org/wiki/Canonical_correlation_analysis "Canonical correlation analysis"), [ridge regression](https://en.wikipedia.org/wiki/Ridge_regression "Ridge regression"), [spectral clustering](https://en.wikipedia.org/wiki/Spectral_clustering "Spectral clustering"), [linear adaptive filters](https://en.wikipedia.org/wiki/Adaptive_filter "Adaptive filter") and many others.
 
+$$
+f(x) = w^T\phi(x) + b
+$$
+
 Note: Kernel methods can be thought of as [instance-based learners](https://en.wikipedia.org/wiki/Instance-based_learning "Instance-based learning"), they area also being called 'lazy learning' rather than learning some fixed set of parameters corresponding to the features of their inputs, they instead "remember" the 𝑖![{\displaystyle i}](https://wikimedia.org/api/rest_v1/media/math/render/svg/add78d8608ad86e54951b8c8bd6c8d8416533d20)-th training example and learn for it a corresponding weight 𝑤𝑖 (Wikipedia)
 
 #### The Kernel Trick
 
-Theoretically we can transform data into kerkenl space then any problem becomes linearly separable! But the problem is that some useful kernel transforms map the input space into infinite dimensional space and the model gets very complex and the computation gets expensive.
+The kernel trick allows algorithms to operate in the high-dimensional space implicitly, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O\(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.
 
-**Implicit Transformation:** Explicitly working in generic Kernel space takes time &Omega;(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.
+Let $\phi(x)$ represent the feature vector after mapping x Thus, the model corresponding to the hyperplane in the feature space can be expressed as:
 
 $$
-\phi(\vec{x_i}) \cdot \phi(\vec{x_j}) \quad
+f(x) = w^T\phi(x) + b
+$$
+
+$$
+\min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 \\
+s.t.
+$$
+
+$$
+y_i (\mathbf{w}^T \phi(\mathbf{x_i}) + b) \geq 1, \quad i = 1, 2, \ldots, m
+$$
+
+The dual problem:
+
+$$
+\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})
+$$
+
+$$
+s.t.
+$$
+
+$$
+\sum_{i=1}^m \alpha_i y_i = 0, \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m
+$$
+
+It invovles compute
+
+$ \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$
+
+This is the inner product of samples x_i and x_j mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function:
+
+$$
+\kappa(\mathbf{x_i}, \mathbf{x_j}) = \langle \phi(\mathbf{x_i}), \phi(\mathbf{x_j}) \rangle = \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})
+$$
+
+This is called **Kernel trick**
+
+Therefore we use $\kappa(\mathbf{x_i}, \mathbf{x_j})$ to replace $\phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ above optimization:
+
+
+$$
+\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \kappa(\mathbf{x_i}, \mathbf{x_j}) \quad 
+$$
+
+s.t. 
+
+$$
+\sum_{i=1}^m \alpha_i y_i = 0,  \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m
+$$
+
+After solving, we obtain:
+
+$$
+f(x) = \mathbf{w}^T \phi(x) + b \\
+     = \sum_{i=1}^m \alpha_i y_i \phi(\mathbf{x_i})^T \phi(x) + b \\
+= \sum_{i=1}^m \alpha_i y_i \kappa(x, \mathbf{x_i}) + b \quad
 $$
 
 e.g.
@@ -127,7 +187,7 @@ e.g.
     $$
     (1 + \vec{x_i} \cdot \vec{x_j})^2
     $$
-- **RBF (Radial Basis Function) Kernel Transform for Data in R^d**
+- **RBF (Radial Basis Function) Kernel  / Gaussian kernel Transform for Data in R^d**
 
   - **Explicit Transform**: Infinite Dimension!
 
