@@ -6,27 +6,9 @@ categories:
 - Classification
 - Perceptron & Kernalization
 
-## **Linear Decision Boundaries** :
+## The Linear Classifier
 
-Learning Linear Decision Boundaries for binary classification (y = {-1, +1})
-
-g = decision boundry
-
-$$
-g(\vec{x})=\vec{w} * \vec{x} + w_0 = 0
-$$
-
-f = linear classifier
-
-$$
-f(\vec{x}) := \begin{cases} 
-+1 & \text{if } g(\vec{x}) \geq 0 \\
--1 & \text{if } g(\vec{x}) < 0 \end{cases} = sign(\vec{w} * \vec{x} + w_0)
-$$
-
-### The Linear Classifier
-
-A computational unit in a neuron. When combined to make a network, it can approximate any smooth function.
+A linear classifier is a method that classifies data points by computing a linear combination of their features. The decision boundary formed by a linear classifier is a straight line or hyperplane that separates different classes.
 
 We have labeld training data:
 
@@ -34,7 +16,21 @@ $$
 (\vec{x_1}, y_1), (\vec{x_2}, y_2)....(\vec{x_n}, y_n)
 $$
 
-Obejective function:
+Decision boundary:
+
+$$
+g(\vec{x})=\vec{w} * \vec{x} + w_0 = 0
+$$
+
+Linear classifier f(x):
+
+$$
+f(\vec{x}) := \begin{cases}
++1 & \text{if } g(\vec{x}) \geq 0 \\
+-1 & \text{if } g(\vec{x}) < 0 \end{cases} = sign(\vec{w} * \vec{x} + w_0))
+$$
+
+Objective function (omit w0):
 
 $$
 \arg \min_{\vec{w}} \frac{1}{n} \sum_{i=1}^{n} 1[\text{sign}(\vec{w} \cdot \vec{x_i}) \neq y_i]
@@ -44,9 +40,9 @@ $$
 
 Minimize the average misclassification error across all examples to find the weights.
 
-#### **The Perceptron Algorithm** 
+### The Perceptron Problem
 
-labelled training data:
+Labelled training data:
 
 $$
 S = \{ (\vec{x_1}, y_1), (\vec{x_2}, y_2), \ldots, (\vec{x_n}, y_n) \}
@@ -61,7 +57,7 @@ $$
 For t = 1,2,3,...
 
 $$
-(\vec{x}, y) \in S \space s.t. \space sign(\vec{w}^(t-1) * \vec{x} / \neq y
+(\vec{x}, y) \in S \space s.t. \space sign(\vec{w}^(t-1) * \vec{x}) \neq y
 $$
 
 $$
@@ -111,11 +107,13 @@ Note: Kernel methods can be thought of as [instance-based learners](https://en.w
 
 The kernel trick allows algorithms to operate in the high-dimensional space implicitly, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O\(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.
 
-Let $\phi(x)$ represent the feature vector after mapping x Thus, the model corresponding to the hyperplane in the feature space can be expressed as:
+Let $\phi(x)$ represent the feature vector after mapping x to the feature space, the model corresponding to the hyperplane in the feature space can be expressed as:
 
 $$
 f(x) = w^T\phi(x) + b
 $$
+
+SVM designed to find the optimal decision boundary **f**(**x**) by maximizing the margin between the two classes.
 
 $$
 \min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 \\
@@ -144,7 +142,7 @@ It invovles compute
 
 $ \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$
 
-This is the inner product of samples x_i and x_j mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function:
+This is the inner product of samples xi and xj mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function:
 
 $$
 \kappa(\mathbf{x_i}, \mathbf{x_j}) = \langle \phi(\mathbf{x_i}), \phi(\mathbf{x_j}) \rangle = \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})
@@ -154,12 +152,11 @@ This is called **Kernel trick**
 
 Therefore we use $\kappa(\mathbf{x_i}, \mathbf{x_j})$ to replace $\phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ above optimization:
 
-
 $$
-\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \kappa(\mathbf{x_i}, \mathbf{x_j}) \quad 
+\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \kappa(\mathbf{x_i}, \mathbf{x_j}) \quad
 $$
 
-s.t. 
+s.t.
 
 $$
 \sum_{i=1}^m \alpha_i y_i = 0,  \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m
@@ -179,14 +176,15 @@ e.g.
 
   - **Explicit Transform** \(O(d^2)\)
 
-    $$
-    \vec{x} \mapsto (x_1^2, \ldots, x_d^2, \sqrt{2} x_1 x_2, \ldots, \sqrt{2} x_{d-1} x_d, \sqrt{2} x_1, \ldots, \sqrt{2} x_d, 1)
-    $$
-  - **Dot Products** \(O(d))
+$$
+\vec{x} \mapsto (x_1^2, \ldots, x_d^2, \sqrt{2} x_1 x_2, \ldots, \sqrt{2} x_{d-1} x_d, \sqrt{2} x_1, \ldots, \sqrt{2} x_d, 1)
+$$
 
-    $$
-    (1 + \vec{x_i} \cdot \vec{x_j})^2
-    $$
+- **Dot Products** \(O(d))
+
+  $$
+  (1 + \vec{x_i} \cdot \vec{x_j})^2
+  $$
 - **RBF (Radial Basis Function) Kernel  / Gaussian kernel Transform for Data in R^d**
 
   - **Explicit Transform**: Infinite Dimension!
@@ -229,7 +227,6 @@ In the transformed space, it would become:
 $$
 f(\phi(\vec{x})) := \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x})) \right)
 $$
-
 
 $$
 \sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x}))
