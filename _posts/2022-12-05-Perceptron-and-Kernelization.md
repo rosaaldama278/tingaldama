@@ -1,12 +1,13 @@
+---
 title: "Perceptron and kernalization"
 date: 2023-12-05
 summary:  A exploration of linear and non-linear decision boundaries in binary classification, focusing on the perceptron algorithm and the kernel trick for transforming non-linearly separable data into a higher-dimensional space where it becomes linearly separable.
 categories:
+ - Classification 
+ - Perceptron & Kernalization
 
-- Classification
-- Perceptron & Kernalization
-
-## The Linear Classifier
+---
+The Linear Classifier
 
 A linear classifier is a method that classifies data points by computing a linear combination of their features. The decision boundary formed by a linear classifier is a straight line or hyperplane that separates different classes.
 
@@ -105,7 +106,7 @@ Note: Kernel methods can be thought of as [instance-based learners](https://en.w
 
 #### The Kernel Trick
 
-The kernel trick allows algorithms to operate in the high-dimensional space implicitly, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O\(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.
+The kernel trick allows algorithms to operate in the high-dimensional space **implicitly**, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O\(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.
 
 Let $\phi(x)$ represent the feature vector after mapping x to the feature space, the model corresponding to the hyperplane in the feature space can be expressed as:
 
@@ -240,4 +241,8 @@ $$
 
 **Can be replaced by any user-defined measure of similarity!**
 
-Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost
+Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation costtitle: "Understanding Cross Entropy Loss"
+
+date: 2024-02-21
+summary: How does cross entropy loss work with an language model example
+categories:
