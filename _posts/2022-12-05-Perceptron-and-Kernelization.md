@@ -1,6 +1,6 @@
 title: "Perceptron and kernalization"
 date: 2023-12-05
-summary: How does cross entropy loss work with an language model example
+summary:  A exploration of linear and non-linear decision boundaries in binary classification, focusing on the perceptron algorithm and the kernel trick for transforming non-linearly separable data into a higher-dimensional space where it becomes linearly separable.
 categories:
 
 - Classification
@@ -26,11 +26,7 @@ $$
 
 ### The Linear Classifier
 
-A computational unit in a neuron
-
-If we combine to make a network can arrroximate any smooth function
-
-**Learn the weights**
+A computational unit in a neuron. When combined to make a network, it can approximate any smooth function.
 
 We have labeld training data:
 
@@ -46,11 +42,7 @@ $$
 = \arg \min_{\vec{w}} \sum_{x_i \atop s.t. y_i=+1} 1[\vec{x_i} \cdot \vec{w} < 0] + \sum_{x_i \atop s.t. y_i=-1} 1[\vec{x_i} \cdot \vec{w} \geq 0]
 $$
 
-We want to find the average misclassifications error across all the examples to minimize it to get weights
-
-How to minimize it?
-
-We need to make sure its linearly separable! otherwise finding a perfect classifier becomes a NP-hard problem to solve or even approximate!
+Minimize the average misclassification error across all examples to find the weights.
 
 #### **The Perceptron Algorithm** :
 
@@ -72,10 +64,12 @@ $$
 (\vec{x}, y) \in S \space s.t. \space sign(\vec{w}^(t-1) * \vec{x} / \neq y
 $$
 
-\vec{w}^{(t)} \leftarrow \begin{cases} 
+$$
+\vec{w}^{(t)} \leftarrow \begin{cases}
 \vec{w}^{(t-1)} + \vec{x} & \text{if } y = +1 \\
-\vec{w}^{(t-1)} - \vec{x} & \text{if } y = -1 
+\vec{w}^{(t-1)} - \vec{x} & \text{if } y = -1
 \end{cases}
+$$
 
 Terminate when there is no such misclassification, but when?
 
@@ -87,7 +81,7 @@ Compared to linear decision boundaries, non-linear decision boundries are more c
 
 Non-linearly separable data in the original feature space can be transformed into a higher-dimensional space where it becomes linearly separable
 
-![1718221506282](image/2022-12-05-Perceptron-and-Kernelization/1718221506282.png)
+![1718383521601](image/2022-12-05-Perceptron-and-Kernelization/1718383521601.png)
 
 Now we have this training data and the decision boundaries is some sort of ellipse
 
@@ -95,59 +89,98 @@ $$
 g(\vec{x}) = w_1*\vec{x_1}^2 + w_2*{x_2}^2 + w_0
 $$
 
-But, g can be linear in some space: 
+But, g can be linear in some space:
 
 $$
-\phi(x_1, x_2) \mapsto (x_1^2, x_2^2)
+\phi(x_1, x_2) \mapsto (x_1, x_2, x_1^2 + x_2^2)
 $$
 
-![1718221718550](image/2022-12-05-Perceptron-and-Kernelization/1718221718550.png)
+![1718383530487](image/2022-12-05-Perceptron-and-Kernelization/1718383530487.png)
 
-Generic quadratic boundary
+### Kernel Methods
 
-### Data is Linearly Separable in some Space 
+The kernel method involves mapping data from its original space (which might be low-dimensional and non-linearly separable) to a higher-dimensional space where a linear decision boundary can separate the classes. This mapping is achieved through a function ϕ(x) which transforms the data points.  Algorithms capable of operating with kernels include the [kernel perceptron](https://en.wikipedia.org/wiki/Kernel_perceptron "Kernel perceptron"), support-vector machines (SVM), [Gaussian processes](https://en.wikipedia.org/wiki/Gaussian_process), [principal components analysis](https://en.wikipedia.org/wiki/Principal_components_analysis "Principal components analysis") (PCA), [canonical correlation analysis](https://en.wikipedia.org/wiki/Canonical_correlation_analysis "Canonical correlation analysis"), [ridge regression](https://en.wikipedia.org/wiki/Ridge_regression "Ridge regression"), [spectral clustering](https://en.wikipedia.org/wiki/Spectral_clustering "Spectral clustering"), [linear adaptive filters](https://en.wikipedia.org/wiki/Adaptive_filter "Adaptive filter") and many others.
 
-Theorem:
+Note: Kernel methods can be thought of as [instance-based learners](https://en.wikipedia.org/wiki/Instance-based_learning "Instance-based learning"), they area also being called 'lazy learning' rather than learning some fixed set of parameters corresponding to the features of their inputs, they instead "remember" the 𝑖![{\displaystyle i}](https://wikimedia.org/api/rest_v1/media/math/render/svg/add78d8608ad86e54951b8c8bd6c8d8416533d20)-th training example and learn for it a corresponding weight 𝑤𝑖 (Wikipedia)
 
-*Given n distinct points*
+#### The Kernel Trick
 
-*$S=\vec{x_i}, \vec{x_2}...$*
+Theoretically we can transform data into kerkenl space then any problem becomes linearly separable! But the problem is that some useful kernel transforms map the input space into infinite dimensional space and the model gets very complex and the computation gets expensive.
 
-**there exists a feature transform such that for any labelling of S is linearly**
+**Implicit Transformation:** Explicitly working in generic Kernel space takes time &Omega;(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.
 
-**separable in the transformed space!**
+$$
+\phi(\vec{x_i}) \cdot \phi(\vec{x_j}) \quad
+$$
 
-### The Kernel Trick
+e.g.
 
-Theoretically we can transform data into kerkenl space then any problem becomes linearly separable! But the problem is that some useful kernel transforms map the input sapce into infinite dimensional space and the model gets very complex and the computation gets expensive.
+- *Quadratic Kernel Transform for Data in R^d*
 
-**Implicit Transformation:** Explicitly working in generic Kernel space
+  - **Explicit Transform** \(O(d^2)\)
+
+    $$
+    \vec{x} \mapsto (x_1^2, \ldots, x_d^2, \sqrt{2} x_1 x_2, \ldots, \sqrt{2} x_{d-1} x_d, \sqrt{2} x_1, \ldots, \sqrt{2} x_d, 1)
+    $$
+  - **Dot Products** \(O(d))
+
+    $$
+    (1 + \vec{x_i} \cdot \vec{x_j})^2
+    $$
+- **RBF (Radial Basis Function) Kernel Transform for Data in R^d**
+
+  - **Explicit Transform**: Infinite Dimension!
+
+    $$
+    \vec{x} \mapsto \left( \frac{(2 / \pi)^{d / 4} \cdot \exp(-\|\vec{x} - \alpha\|^2)}{\alpha \in \mathbb{R}^d} \right)
+    $$
+  - **Dot Products** \(O(d)\)
+
+    $$
+    exp\left(-\|\vec{x_i} - \vec{x_j}\|^2\right)
+    $$
+
+#### The Kernel Perceptron
+
+From earlier we have:
+
+$$
+\vec{w}^{(t)} \leftarrow \vec{w}^{(t-1)} + y \vec{x}
+$$
+
+Equivalently:
+
+$$
+\vec{w} = \sum_{k=1}^n \alpha_k y_k \vec{x}_k
+$$
+
+$$
+\alpha_k \space is \space the \space number \space of \space times \space \vec{x}_k \space was \space misclassified
+$$
+
+The classification becomes:
+
+$$
+f(\vec{x}) := \text{sign}(\vec{w} \cdot \vec{x}) = \text{sign}\left(\vec{x} \cdot \sum_{k=1}^n \alpha_k y_k \vec{x}_k \right) = \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\vec{x}_k \cdot \vec{x}) \right)
+$$
+
+In the transformed space, it would become:
+
+$$
+f(\phi(\vec{x})) := \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x})) \right)
+$$
 
 
-Introduction to the linear classifier
+$$
+\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x}))
+$$
 
-The perceptron algorithm steps
+$$
+\phi(\vec{x}_k) \cdot \phi(\vec{x})
+$$
 
-Guarantee of the perceptron algorithm's termination
+**dot products are a measure of similarity**
 
-Perceptron mistake bound theorem and its implications
+**Can be replaced by any user-defined measure of similarity!**
 
-### **Generalizing Linear Classification to Non-Linear** :
-
-Non-linear decision boundaries and the need for feature transformation
-
-Feature transformation to make problems linearly separable in transformed space
-
-### **The Kernel Trick** :
-
-The kernel trick to handle computation in high-dimensional space
-
-Example of kernel perceptron
-
-Advantages and significance of using kernel tricks for classification
-
-**Summary and Questions** :
-
-Review of decision boundaries, perceptron algorithm, mistake bounds, kernel space generalization, and kernel tricks
-
-### Support Vector Machines (SVMs)
+Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost
