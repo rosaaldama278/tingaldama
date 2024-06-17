@@ -5,7 +5,6 @@ summary:  A exploration of linear and non-linear decision boundaries in binary c
 categories:
  - Classification 
  - Perceptron & Kernalization
-
 ---
 The Linear Classifier
 
@@ -171,7 +170,7 @@ f(x) = \mathbf{w}^T \phi(x) + b \\
 = \sum_{i=1}^m \alpha_i y_i \kappa(x, \mathbf{x_i}) + b \quad
 $$
 
-e.g.
+The choice of kernel functions:
 
 - *Quadratic Kernel Transform for Data in R^d*
 
@@ -241,8 +240,4 @@ $$
 
 **Can be replaced by any user-defined measure of similarity!**
 
-Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation costtitle: "Understanding Cross Entropy Loss"
-
-date: 2024-02-21
-summary: How does cross entropy loss work with an language model example
-categories:
+Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost.
