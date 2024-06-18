@@ -1,10 +1,11 @@
 ---
-title: "Regression"
+title: "A Gentle Introduction to Regression"
 date: 2022-12-11
-summary: Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units.
+summary: This post provides an in-depth look at various regression techniques, including parametric and non-parametric regression, linear regression, Lasso and Ridge regression, logistic regression, and kernel regression.
 categories:
-   - tokenization
-   - BPE
+- Regression Techniques
+- Parametric & Non-parametric Methods
+- Statistical Modeling
 ---
 ## Parametric vs Nonparametric Regressioin
 
@@ -76,7 +77,7 @@ $$
 (X^T X)\mathbf{w} = X^T \mathbf{y}
 $$
 
-This system is always consistent: 
+This system is always consistent:
 
 $$
 \mathbf{\vec{y}} = \mathbf{\vec{y}}_{\text{col}(X)} + \mathbf{\vec{y}}_{\text{null}(X^T)}
@@ -116,7 +117,7 @@ $$
 
 Also called the Ordinary Least Squares (OLS). The solution is unique and stable when $(X^T X)$ is invertible
 
-### Linear Regression in Statisticall Modeling View 
+### Linear Regression in Statisticall Modeling View
 
 Let's assume that data is generated from the following process:
 
@@ -161,7 +162,7 @@ $$
 
 optimizing for $w$ yields the same OLS result!
 
-#### Lasso Regression & Ridge Regression 
+#### Lasso Regression & Ridge Regression
 
 Previously we looked at Ordinary Least Square (OLS)
 
@@ -175,7 +176,7 @@ $$
 
 Which is  poorly behaved (due to overfitting) when we have limited data. We can incorporate application dependent piror knowledge.
 
-**Lasso regression:** 
+**Lasso regression:**
 
 Objective
 
@@ -191,7 +192,7 @@ minimize $|X\vec{w} - \vec{y}|^2$
 
 such that $|\vec{w}|^2 \leq B$
 
-**Ridge Regression:** 
+**Ridge Regression:**
 
 Objective
 
@@ -209,7 +210,7 @@ such that $|\vec{w}|_1 \leq B$
 
 ### Logistic Regression
 
-Linear regression for classification: 
+Linear regression for classification:
 
 Although its name contains "regression," it is actually used for classification tasks. For a binary classification problem, given input x, how likely is it that it has label 1?Let this be denoted by P, ie, P is the chance that a given x the associated label y = 1, P = P(Y=1|X=x) ranges between 0 and 1, hence cannot be modelled appropriately via linear regression. If we look at the 'odds' of getting y=1 (for a given x) $odds(P) := \frac{P}{1-P}$
 
@@ -246,7 +247,7 @@ $= \sum_{i=1}^{n} y_i (w \cdot x_i) + \sum_{i=1}^{n} - log(1 + e^{w \cdot x_i})$
 No closed form solution
 Can use iterative methods like gradient 'ascent' to find the solution
 
-### Non-parametric Regression 
+### Non-parametric Regression
 
 What if we don’t know parametric form of the relationship between the independent and dependent variables? How can we predict value of a
 
@@ -268,7 +269,7 @@ $$
 K_h(x, x') = e^{-||x-x'||^2/h}$$ Gaussian kernel
 $$= 1[||x - x'|| \leq h]$$ Box kernel
 $$= [1 - (1/h)||x - x'||]_+$$ Triangle kernel
-       
+   
 Then define:
-$$w_i(x) := \frac{K_h(x,x_i)}{\sum_{j=1}^n K_h(x,x_j)}$$ Weighted average
+w_i(x) := \frac{K_h(x,x_i)}{\sum_{j=1}^n K_h(x,x_j)}
 $$

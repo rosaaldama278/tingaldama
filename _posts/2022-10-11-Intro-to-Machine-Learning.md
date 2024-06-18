@@ -2,7 +2,9 @@
 title: "Intro to Machine Learning"
 summary: Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data.
 date: 2022-10-11
-categories: supervised-learning
+categories: 
+- Supervised Learning
+- Unsupervised Learning 
 ---
 ### What is Machine Learning?
 

@@ -1,14 +1,12 @@
 ---
-title: "Understanding Cross Entropy Loss"
+title: "In-Depth Guide to Cross Entropy Loss"
 date: 2024-02-21
-summary: How does cross entropy loss work with an language model example
+summary: An exploration of how cross entropy loss functions, demonstrated through a practical example with a language model.
 categories: 
 - cross-entropy-loss
 - language-model
 ---
-Entropy originated in the field of thermodynamics and was later adapted to information theory by Claude Shannon. Its used to measure **uncertainty or unpredictability**in a system.
-
-Before this, there was no formal way to **quantify the information** needed to describe a system’s state. You might wonder if this ‘uncertainty’ is the same as the uncertainty we experience in daily life, like being unsure if someone will come to dinner. It’s similar but not the same…
+Entropy originated in the field of thermodynamics and was later adapted to information theory by Claude Shannon. Its used to measure **uncertainty or unpredictability**in a system. Before this, there was no formal way to **quantify the information** needed to describe a system’s state. You might wonder if this ‘uncertainty’ is the same as the uncertainty we experience in daily life, like being unsure if someone will come to dinner. It’s similar but not the same…
 
 In everyday use, ‘uncertainty’ means having doubts or a lack of confidence.  **In information theory, ‘uncertainty’ is a precise measure of how much information or surprise an outcome holds, based on the probability distribution of a random variable** . Let’s dive into an example.
 

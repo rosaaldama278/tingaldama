@@ -1,5 +1,5 @@
 ---
-title: "NN & Decision Tree"
+title: "Nearest Neighbors & Decision Tree"
 summary: This post explores the concepts of Nearest Neighbors (k-NN) and Decision Tree algorithms, including their pros and cons, and how to measure uncertainty using Gini impurity and entropy. A detailed example is provided to illustrate the decision tree splitting process.
 date: 2022-11-09
 categories: 
@@ -35,7 +35,7 @@ The idea is to assign the label to the same label as its 'closest neighbor' for 
 
 A decision tree classifier works by recursively partitioning the data into subsets that are more **homogeneous** in terms of the target variable.
 
-**Recursive Partitioning:** 
+**Recursive Partitioning:**
 
 * A decision tree splits the data into subsets based on the value of input features.
 * At each node in the tree, the algorithm selects the feature and threshold that results in the best split, meaning the split that most reduces uncertainty or impurity.
@@ -80,7 +80,7 @@ $$
 
 Pruning is a technique used in decision tree algorithms to reduce overfitting and improve the model's generalization to unseen data. Overfitting occurs when a decision tree model becomes too complex and captures noise in the training data instead of the underlying pattern. Pruning simplifies the tree by removing parts that do not provide significant power to classify instances.
 
-Two tyeps of pruning: 
+Two tyeps of pruning:
 
 * **Pre-pruning (Early Stopping)**
 * **Post-pruning (Pruning after Tree Construction)**
@@ -89,7 +89,7 @@ Two tyeps of pruning:
 
 ID3 (Iterative Dichotomiser 3) is an algorithm used to create decision trees. ID3 is the precursor to the [C4.5 algorithm](https://en.wikipedia.org/wiki/C4.5_algorithm "C4.5 algorithm"), and is typically used in the [machine learning](https://en.wikipedia.org/wiki/Machine_learning "Machine learning") and [natural language processing](https://en.wikipedia.org/wiki/Natural_language_processing "Natural language processing") domain.
 
-#### How it works: 
+#### How it works:
 
 **Initialization**:
 
