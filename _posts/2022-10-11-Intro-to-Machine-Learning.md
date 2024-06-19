@@ -4,7 +4,7 @@ summary: Machine Learning is the study of making machines learn a concept withou
 date: 2022-10-11
 categories: 
 - Supervised Learning
-- Unsupervised Learning 
+- Unsupervised Learning `1
 ---
 ### What is Machine Learning?
 

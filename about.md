@@ -7,7 +7,7 @@ Hello! I'm Ting Aldama, Welcome to my blog!  ❤️🔥
 
 ### Background 🎓
 
-I hold a Master's degree in Computer Science with a specialization in Machine Learning from Columbia University. I have extensive experience in building ML model with ML modeling frameworks (PyTorch, Tensorflow)  and cloud data processing technologies and frameworks such as Apache Saprk, SQL, etc. as a data analyst before my graduate study 📚
+I hold a Master's degree in Computer Science with a specialization in Machine Learning from Columbia University. I have extensive experience in building ML model with ML modeling frameworks (PyTorch, Tensorflow)  and cloud data processing technologies and frameworks such as Apache Spark, SQL, etc. as a data analyst before my graduate study 📚
 
 ### Professional Experience 💼
 
