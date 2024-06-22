@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Blogs
-permalink: blog
+title: ML Blog
+permalink: ml-blog
 ---
 
