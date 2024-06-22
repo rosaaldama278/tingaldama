@@ -219,7 +219,7 @@ class MultiHeadAttn(nn.Module):
 
 ```
 
-### Cross-Head Attention
+### Cross Attention
 
 Cross Attention only modifies the input of Self Attention. The decoder of the Transformer is shown in the right module of the figure below:
 
