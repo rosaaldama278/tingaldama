@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Maximum Likelihood (MLE) vs Maximum A Posteriori (MAP) | Tingaldama</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Maximum Likelihood (MLE) vs Maximum A Posteriori (MAP)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Maximum Likelihood Estimation (MLE) and Maximum A Posteriori (MAP) Estimation Sometimes people use those two terms interchangleablly, but there is a difference between them. Maximum Likelihood Estimation (MLE) Define the Likelihood Function: Given data $X = {x_1, x_2, \ldots, x_n}$ and model parameters $\theta$, the likelihood function is $P(X \theta)$. For i.i.d. data, the likelihood is the product of individual likelihoods: \(P(X|\theta) = \prod_{i=1}^n P(x_i|\theta)\) Log-Likelihood: To simplify calculations, we use the log-likelihood: \(\log P(X|\theta) = \sum_{i=1}^n \log P(x_i|\theta)\) Maximize the Log-Likelihood: Find the parameter values $\theta$ that maximize the log-likelihood function: \(\hat{\theta}_{\text{MLE}} = \arg \max_\theta \log P(X|\theta)\) This involves taking the derivative of the log-likelihood with respect to $\theta$, setting it to zero, and solving for $\theta$: \(\frac{\partial}{\partial \theta} \log P(X|\theta) = 0\) Example: MLE for Gaussian Distribution Data: $X = {x_1, x_2, \ldots, x_n}$ Model: $x_i \sim \mathcal{N}(\mu, \sigma^2)$ Parameters: $\theta = (\mu, \sigma^2)$ Likelihood Function: \[P(X|\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp \left( -\frac{(x_i - \mu)^2}{2\sigma^2} \right)\] Log-Likelihood: \[\log P(X|\mu, \sigma^2) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2\] Maximize the Log-Likelihood: For $\mu$: \(\frac{\partial}{\partial \mu} \log P(X|\mu, \sigma^2) = \frac{1}{\sigma^2} \sum_{i=1}^n (x_i - \mu) = 0 \implies \hat{\mu} = \frac{1}{n} \sum_{i=1}^n x_i\) For $\sigma^2$: \(\frac{\partial}{\partial \sigma^2} \log P(X|\mu, \sigma^2) = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4} \sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \hat{\mu})^2\) Maximum A Posteriori (MAP) Estimation Define the Posterior Probability: Use Bayes’ theorem to define the posterior probability of the parameters given the data: \(P(\theta|X) = \frac{P(X|\theta) P(\theta)}{P(X)}\) Here, $P(\theta)$ is the prior distribution of the parameters, and $P(X)$ is the marginal likelihood. Log-Posterior: To simplify calculations, we use the log-posterior: \(\log P(\theta|X) = \log P(X|\theta) + \log P(\theta) - \log P(X)\) Since $P(X)$ does not depend on $\theta$, it can be ignored for maximization: \(\log P(\theta|X) \propto \log P(X|\theta) + \log P(\theta)\) Maximize the Log-Posterior: Find the parameter values $\theta$ that maximize the log-posterior: \(\hat{\theta}_{\text{MAP}} = \arg \max_\theta \left( \log P(X|\theta) + \log P(\theta) \right)\) This involves taking the derivative of the log-posterior with respect to $\theta$, setting it to zero, and solving for $\theta$: \(\frac{\partial}{\partial \theta} \left( \log P(X|\theta) + \log P(\theta) \right) = 0\) Example: MAP for Gaussian Distribution with Normal Prior Data: $X = {x_1, x_2, \ldots, x_n}$ Model: $x_i \sim \mathcal{N}(\mu, \sigma^2)$ Prior: $\mu \sim \mathcal{N}(\mu_0, \tau^2)$ Parameters: $\theta = (\mu, \sigma^2)$ Prior Probability: \[P(\mu) = \frac{1}{\sqrt{2\pi\tau^2}} \exp \left( -\frac{(\mu - \mu_0)^2}{2\tau^2} \right)\] Log-Likelihood: \[\log P(X|\mu, \sigma^2) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2\] Log-Prior: \[\log P(\mu) = -\frac{1}{2} \log(2\pi\tau^2) - \frac{(\mu - \mu_0)^2}{2\tau^2}\] Log-Posterior: \[\log P(\mu|X) \propto -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2 - \frac{1}{2} \log(2\pi\tau^2) - \frac{(\mu - \mu_0)^2}{2\tau^2}\] Maximize the Log-Posterior: Take the derivative with respect to $\mu$: \(\frac{\partial}{\partial \mu} \log P(\mu|X) = \frac{n}{\sigma^2} \left( \frac{1}{n} \sum_{i=1}^n x_i - \mu \right) - \frac{\mu - \mu_0}{\tau^2} = 0\) Solve for $\mu$: \(\mu = \frac{\frac{n}{\sigma^2} \bar{x} + \frac{1}{\tau^2} \mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau^2}}\) where $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$ is the sample mean. Summary MLE: Maximizes the likelihood of the observed data without considering prior information. MAP: Maximizes the posterior probability, which combines the likelihood of the observed data with prior information." />
+<meta property="og:description" content="Maximum Likelihood Estimation (MLE) and Maximum A Posteriori (MAP) Estimation Sometimes people use those two terms interchangleablly, but there is a difference between them. Maximum Likelihood Estimation (MLE) Define the Likelihood Function: Given data $X = {x_1, x_2, \ldots, x_n}$ and model parameters $\theta$, the likelihood function is $P(X \theta)$. For i.i.d. data, the likelihood is the product of individual likelihoods: \(P(X|\theta) = \prod_{i=1}^n P(x_i|\theta)\) Log-Likelihood: To simplify calculations, we use the log-likelihood: \(\log P(X|\theta) = \sum_{i=1}^n \log P(x_i|\theta)\) Maximize the Log-Likelihood: Find the parameter values $\theta$ that maximize the log-likelihood function: \(\hat{\theta}_{\text{MLE}} = \arg \max_\theta \log P(X|\theta)\) This involves taking the derivative of the log-likelihood with respect to $\theta$, setting it to zero, and solving for $\theta$: \(\frac{\partial}{\partial \theta} \log P(X|\theta) = 0\) Example: MLE for Gaussian Distribution Data: $X = {x_1, x_2, \ldots, x_n}$ Model: $x_i \sim \mathcal{N}(\mu, \sigma^2)$ Parameters: $\theta = (\mu, \sigma^2)$ Likelihood Function: \[P(X|\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp \left( -\frac{(x_i - \mu)^2}{2\sigma^2} \right)\] Log-Likelihood: \[\log P(X|\mu, \sigma^2) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2\] Maximize the Log-Likelihood: For $\mu$: \(\frac{\partial}{\partial \mu} \log P(X|\mu, \sigma^2) = \frac{1}{\sigma^2} \sum_{i=1}^n (x_i - \mu) = 0 \implies \hat{\mu} = \frac{1}{n} \sum_{i=1}^n x_i\) For $\sigma^2$: \(\frac{\partial}{\partial \sigma^2} \log P(X|\mu, \sigma^2) = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4} \sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \hat{\mu})^2\) Maximum A Posteriori (MAP) Estimation Define the Posterior Probability: Use Bayes’ theorem to define the posterior probability of the parameters given the data: \(P(\theta|X) = \frac{P(X|\theta) P(\theta)}{P(X)}\) Here, $P(\theta)$ is the prior distribution of the parameters, and $P(X)$ is the marginal likelihood. Log-Posterior: To simplify calculations, we use the log-posterior: \(\log P(\theta|X) = \log P(X|\theta) + \log P(\theta) - \log P(X)\) Since $P(X)$ does not depend on $\theta$, it can be ignored for maximization: \(\log P(\theta|X) \propto \log P(X|\theta) + \log P(\theta)\) Maximize the Log-Posterior: Find the parameter values $\theta$ that maximize the log-posterior: \(\hat{\theta}_{\text{MAP}} = \arg \max_\theta \left( \log P(X|\theta) + \log P(\theta) \right)\) This involves taking the derivative of the log-posterior with respect to $\theta$, setting it to zero, and solving for $\theta$: \(\frac{\partial}{\partial \theta} \left( \log P(X|\theta) + \log P(\theta) \right) = 0\) Example: MAP for Gaussian Distribution with Normal Prior Data: $X = {x_1, x_2, \ldots, x_n}$ Model: $x_i \sim \mathcal{N}(\mu, \sigma^2)$ Prior: $\mu \sim \mathcal{N}(\mu_0, \tau^2)$ Parameters: $\theta = (\mu, \sigma^2)$ Prior Probability: \[P(\mu) = \frac{1}{\sqrt{2\pi\tau^2}} \exp \left( -\frac{(\mu - \mu_0)^2}{2\tau^2} \right)\] Log-Likelihood: \[\log P(X|\mu, \sigma^2) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2\] Log-Prior: \[\log P(\mu) = -\frac{1}{2} \log(2\pi\tau^2) - \frac{(\mu - \mu_0)^2}{2\tau^2}\] Log-Posterior: \[\log P(\mu|X) \propto -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2 - \frac{1}{2} \log(2\pi\tau^2) - \frac{(\mu - \mu_0)^2}{2\tau^2}\] Maximize the Log-Posterior: Take the derivative with respect to $\mu$: \(\frac{\partial}{\partial \mu} \log P(\mu|X) = \frac{n}{\sigma^2} \left( \frac{1}{n} \sum_{i=1}^n x_i - \mu \right) - \frac{\mu - \mu_0}{\tau^2} = 0\) Solve for $\mu$: \(\mu = \frac{\frac{n}{\sigma^2} \bar{x} + \frac{1}{\tau^2} \mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau^2}}\) where $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$ is the sample mean. Summary MLE: Maximizes the likelihood of the observed data without considering prior information. MAP: Maximizes the posterior probability, which combines the likelihood of the observed data with prior information." />
+<link rel="canonical" href="http://localhost:4000/tingaldama/mle/map/gaussian%20distribution/2023/05/11/MAP-vs-MLE.html" />
+<meta property="og:url" content="http://localhost:4000/tingaldama/mle/map/gaussian%20distribution/2023/05/11/MAP-vs-MLE.html" />
+<meta property="og:site_name" content="Tingaldama" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-05-11T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Maximum Likelihood (MLE) vs Maximum A Posteriori (MAP)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-05-11T00:00:00+01:00","datePublished":"2023-05-11T00:00:00+01:00","description":"Maximum Likelihood Estimation (MLE) and Maximum A Posteriori (MAP) Estimation Sometimes people use those two terms interchangleablly, but there is a difference between them. Maximum Likelihood Estimation (MLE) Define the Likelihood Function: Given data $X = {x_1, x_2, \\ldots, x_n}$ and model parameters $\\theta$, the likelihood function is $P(X \\theta)$. For i.i.d. data, the likelihood is the product of individual likelihoods: \\(P(X|\\theta) = \\prod_{i=1}^n P(x_i|\\theta)\\) Log-Likelihood: To simplify calculations, we use the log-likelihood: \\(\\log P(X|\\theta) = \\sum_{i=1}^n \\log P(x_i|\\theta)\\) Maximize the Log-Likelihood: Find the parameter values $\\theta$ that maximize the log-likelihood function: \\(\\hat{\\theta}_{\\text{MLE}} = \\arg \\max_\\theta \\log P(X|\\theta)\\) This involves taking the derivative of the log-likelihood with respect to $\\theta$, setting it to zero, and solving for $\\theta$: \\(\\frac{\\partial}{\\partial \\theta} \\log P(X|\\theta) = 0\\) Example: MLE for Gaussian Distribution Data: $X = {x_1, x_2, \\ldots, x_n}$ Model: $x_i \\sim \\mathcal{N}(\\mu, \\sigma^2)$ Parameters: $\\theta = (\\mu, \\sigma^2)$ Likelihood Function: \\[P(X|\\mu, \\sigma^2) = \\prod_{i=1}^n \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp \\left( -\\frac{(x_i - \\mu)^2}{2\\sigma^2} \\right)\\] Log-Likelihood: \\[\\log P(X|\\mu, \\sigma^2) = -\\frac{n}{2} \\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2} \\sum_{i=1}^n (x_i - \\mu)^2\\] Maximize the Log-Likelihood: For $\\mu$: \\(\\frac{\\partial}{\\partial \\mu} \\log P(X|\\mu, \\sigma^2) = \\frac{1}{\\sigma^2} \\sum_{i=1}^n (x_i - \\mu) = 0 \\implies \\hat{\\mu} = \\frac{1}{n} \\sum_{i=1}^n x_i\\) For $\\sigma^2$: \\(\\frac{\\partial}{\\partial \\sigma^2} \\log P(X|\\mu, \\sigma^2) = -\\frac{n}{2\\sigma^2} + \\frac{1}{2\\sigma^4} \\sum_{i=1}^n (x_i - \\mu)^2 = 0 \\implies \\hat{\\sigma}^2 = \\frac{1}{n} \\sum_{i=1}^n (x_i - \\hat{\\mu})^2\\) Maximum A Posteriori (MAP) Estimation Define the Posterior Probability: Use Bayes’ theorem to define the posterior probability of the parameters given the data: \\(P(\\theta|X) = \\frac{P(X|\\theta) P(\\theta)}{P(X)}\\) Here, $P(\\theta)$ is the prior distribution of the parameters, and $P(X)$ is the marginal likelihood. Log-Posterior: To simplify calculations, we use the log-posterior: \\(\\log P(\\theta|X) = \\log P(X|\\theta) + \\log P(\\theta) - \\log P(X)\\) Since $P(X)$ does not depend on $\\theta$, it can be ignored for maximization: \\(\\log P(\\theta|X) \\propto \\log P(X|\\theta) + \\log P(\\theta)\\) Maximize the Log-Posterior: Find the parameter values $\\theta$ that maximize the log-posterior: \\(\\hat{\\theta}_{\\text{MAP}} = \\arg \\max_\\theta \\left( \\log P(X|\\theta) + \\log P(\\theta) \\right)\\) This involves taking the derivative of the log-posterior with respect to $\\theta$, setting it to zero, and solving for $\\theta$: \\(\\frac{\\partial}{\\partial \\theta} \\left( \\log P(X|\\theta) + \\log P(\\theta) \\right) = 0\\) Example: MAP for Gaussian Distribution with Normal Prior Data: $X = {x_1, x_2, \\ldots, x_n}$ Model: $x_i \\sim \\mathcal{N}(\\mu, \\sigma^2)$ Prior: $\\mu \\sim \\mathcal{N}(\\mu_0, \\tau^2)$ Parameters: $\\theta = (\\mu, \\sigma^2)$ Prior Probability: \\[P(\\mu) = \\frac{1}{\\sqrt{2\\pi\\tau^2}} \\exp \\left( -\\frac{(\\mu - \\mu_0)^2}{2\\tau^2} \\right)\\] Log-Likelihood: \\[\\log P(X|\\mu, \\sigma^2) = -\\frac{n}{2} \\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2} \\sum_{i=1}^n (x_i - \\mu)^2\\] Log-Prior: \\[\\log P(\\mu) = -\\frac{1}{2} \\log(2\\pi\\tau^2) - \\frac{(\\mu - \\mu_0)^2}{2\\tau^2}\\] Log-Posterior: \\[\\log P(\\mu|X) \\propto -\\frac{n}{2} \\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2} \\sum_{i=1}^n (x_i - \\mu)^2 - \\frac{1}{2} \\log(2\\pi\\tau^2) - \\frac{(\\mu - \\mu_0)^2}{2\\tau^2}\\] Maximize the Log-Posterior: Take the derivative with respect to $\\mu$: \\(\\frac{\\partial}{\\partial \\mu} \\log P(\\mu|X) = \\frac{n}{\\sigma^2} \\left( \\frac{1}{n} \\sum_{i=1}^n x_i - \\mu \\right) - \\frac{\\mu - \\mu_0}{\\tau^2} = 0\\) Solve for $\\mu$: \\(\\mu = \\frac{\\frac{n}{\\sigma^2} \\bar{x} + \\frac{1}{\\tau^2} \\mu_0}{\\frac{n}{\\sigma^2} + \\frac{1}{\\tau^2}}\\) where $\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i$ is the sample mean. Summary MLE: Maximizes the likelihood of the observed data without considering prior information. MAP: Maximizes the posterior probability, which combines the likelihood of the observed data with prior information.","headline":"Maximum Likelihood (MLE) vs Maximum A Posteriori (MAP)","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tingaldama/mle/map/gaussian%20distribution/2023/05/11/MAP-vs-MLE.html"},"url":"http://localhost:4000/tingaldama/mle/map/gaussian%20distribution/2023/05/11/MAP-vs-MLE.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/tingaldama/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/tingaldama/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/tingaldama/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#353535">
+<meta name="msapplication-navbutton-color" content="#353535">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/tingaldama/favicon.ico" -->
+
+<!-- end custom head snippets -->
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<link rel="shortcut icon" href="/tingaldama//assets/images/favicon.jpg" type="image/x-icon">
+
+
+  </head>
+  <style>
+    .categories{
+  font-weight: bold;
+  color: #949494;
+}
+ .date{
+  font-weight: bold !important;
+  color: #949494 !important;
+}
+
+  </style>
+  <body>
+    
+<div id="header">
+    <nav>
+      <ul>
+        <li class="fork"><a href="/tingaldama/">Home</a></li>
+        <li class="downloads"><a href="/tingaldama/contact">Contacts</a></li>
+        <li class="downloads"><a href="/tingaldama/about">About</a></li>
+        <li class="downloads"><a href="/tingaldama/blog">Blogs</a></li>
+        <li class="downloads"><a href="/tingaldama/mlps-resources">MLOps Resources</a></li>
+        <li class="downloads"><a href="/tingaldama/personal-growth">Personal Growth</a></li>
+          
+      </ul>
+    </nav>
+  </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        
+
+        <main>
+          <article>
+            <h1>Maximum Likelihood (MLE) vs Maximum A Posteriori (MAP)</h1>
+            <div class="post-meta">
+             <span class="date">Date: May 11, 2023</span>
+      <br>
+      <span class="categories">
+        Categories: MLE | MAP | Gaussian Distribution
+      </span>
+            </div>
+            <br>
+            <div class="post-content">
+              
+              <h2 id="maximum-likelihood-estimation-mle-and-maximum-a-posteriori-map-estimation">Maximum Likelihood Estimation (MLE) and Maximum A Posteriori (MAP) Estimation</h2>
+
+<p>Sometimes people use those two terms interchangleablly, but there is a difference between them.</p>
+
+<h2 id="maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE)</h2>
+
+<ol>
+  <li>
+    <p><strong>Define the Likelihood Function</strong>:</p>
+
+    <ul>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>Given data $X = {x_1, x_2, \ldots, x_n}$ and model parameters $\theta$, the likelihood function is $P(X</td>
+              <td>\theta)$.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>For i.i.d. data, the likelihood is the product of individual likelihoods:
+\(P(X|\theta) = \prod_{i=1}^n P(x_i|\theta)\)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Log-Likelihood</strong>:</p>
+
+    <ul>
+      <li>To simplify calculations, we use the log-likelihood:
+\(\log P(X|\theta) = \sum_{i=1}^n \log P(x_i|\theta)\)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Maximize the Log-Likelihood</strong>:</p>
+
+    <ul>
+      <li>Find the parameter values $\theta$ that maximize the log-likelihood function:
+\(\hat{\theta}_{\text{MLE}} = \arg \max_\theta \log P(X|\theta)\)</li>
+      <li>This involves taking the derivative of the log-likelihood with respect to $\theta$, setting it to zero, and solving for $\theta$:
+\(\frac{\partial}{\partial \theta} \log P(X|\theta) = 0\)</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="example-mle-for-gaussian-distribution">Example: MLE for Gaussian Distribution</h3>
+
+<ul>
+  <li><strong>Data</strong>: $X = {x_1, x_2, \ldots, x_n}$</li>
+  <li><strong>Model</strong>: $x_i \sim \mathcal{N}(\mu, \sigma^2)$</li>
+  <li><strong>Parameters</strong>: $\theta = (\mu, \sigma^2)$</li>
+</ul>
+
+<ol>
+  <li>
+    <p><strong>Likelihood Function</strong>:</p>
+
+\[P(X|\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp \left( -\frac{(x_i - \mu)^2}{2\sigma^2} \right)\]
+  </li>
+  <li>
+    <p><strong>Log-Likelihood</strong>:</p>
+
+\[\log P(X|\mu, \sigma^2) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2\]
+  </li>
+  <li>
+    <p><strong>Maximize the Log-Likelihood</strong>:</p>
+
+    <ul>
+      <li>For $\mu$:
+\(\frac{\partial}{\partial \mu} \log P(X|\mu, \sigma^2) = \frac{1}{\sigma^2} \sum_{i=1}^n (x_i - \mu) = 0 \implies \hat{\mu} = \frac{1}{n} \sum_{i=1}^n x_i\)</li>
+      <li>For $\sigma^2$:
+\(\frac{\partial}{\partial \sigma^2} \log P(X|\mu, \sigma^2) = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4} \sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \hat{\mu})^2\)</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="maximum-a-posteriori-map-estimation">Maximum A Posteriori (MAP) Estimation</h2>
+
+<ol>
+  <li>
+    <p><strong>Define the Posterior Probability</strong>:</p>
+
+    <ul>
+      <li>Use Bayes’ theorem to define the posterior probability of the parameters given the data:
+\(P(\theta|X) = \frac{P(X|\theta) P(\theta)}{P(X)}\)</li>
+      <li>Here, $P(\theta)$ is the prior distribution of the parameters, and $P(X)$ is the marginal likelihood.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Log-Posterior</strong>:</p>
+
+    <ul>
+      <li>To simplify calculations, we use the log-posterior:
+\(\log P(\theta|X) = \log P(X|\theta) + \log P(\theta) - \log P(X)\)</li>
+      <li>Since $P(X)$ does not depend on $\theta$, it can be ignored for maximization:
+\(\log P(\theta|X) \propto \log P(X|\theta) + \log P(\theta)\)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Maximize the Log-Posterior</strong>:</p>
+
+    <ul>
+      <li>Find the parameter values $\theta$ that maximize the log-posterior:
+\(\hat{\theta}_{\text{MAP}} = \arg \max_\theta \left( \log P(X|\theta) + \log P(\theta) \right)\)</li>
+      <li>This involves taking the derivative of the log-posterior with respect to $\theta$, setting it to zero, and solving for $\theta$:
+\(\frac{\partial}{\partial \theta} \left( \log P(X|\theta) + \log P(\theta) \right) = 0\)</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="example-map-for-gaussian-distribution-with-normal-prior">Example: MAP for Gaussian Distribution with Normal Prior</h3>
+
+<ul>
+  <li><strong>Data</strong>: $X = {x_1, x_2, \ldots, x_n}$</li>
+  <li><strong>Model</strong>: $x_i \sim \mathcal{N}(\mu, \sigma^2)$</li>
+  <li><strong>Prior</strong>: $\mu \sim \mathcal{N}(\mu_0, \tau^2)$</li>
+  <li><strong>Parameters</strong>: $\theta = (\mu, \sigma^2)$</li>
+</ul>
+
+<ol>
+  <li>
+    <p><strong>Prior Probability</strong>:</p>
+
+\[P(\mu) = \frac{1}{\sqrt{2\pi\tau^2}} \exp \left( -\frac{(\mu - \mu_0)^2}{2\tau^2} \right)\]
+  </li>
+  <li>
+    <p><strong>Log-Likelihood</strong>:</p>
+
+\[\log P(X|\mu, \sigma^2) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2\]
+  </li>
+  <li>
+    <p><strong>Log-Prior</strong>:</p>
+
+\[\log P(\mu) = -\frac{1}{2} \log(2\pi\tau^2) - \frac{(\mu - \mu_0)^2}{2\tau^2}\]
+  </li>
+  <li>
+    <p><strong>Log-Posterior</strong>:</p>
+
+\[\log P(\mu|X) \propto -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2 - \frac{1}{2} \log(2\pi\tau^2) - \frac{(\mu - \mu_0)^2}{2\tau^2}\]
+  </li>
+  <li>
+    <p><strong>Maximize the Log-Posterior</strong>:</p>
+
+    <ul>
+      <li>Take the derivative with respect to $\mu$:
+\(\frac{\partial}{\partial \mu} \log P(\mu|X) = \frac{n}{\sigma^2} \left( \frac{1}{n} \sum_{i=1}^n x_i - \mu \right) - \frac{\mu - \mu_0}{\tau^2} = 0\)</li>
+      <li>
+        <p>Solve for $\mu$:
+\(\mu = \frac{\frac{n}{\sigma^2} \bar{x} + \frac{1}{\tau^2} \mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau^2}}\)</p>
+
+        <p>where $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$ is the sample mean.</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="summary">Summary</h2>
+
+<ul>
+  <li><strong>MLE</strong>: Maximizes the likelihood of the observed data without considering prior information.</li>
+  <li><strong>MAP</strong>: Maximizes the posterior probability, which combines the likelihood of the observed data with prior information.</li>
+</ul>
+
+            </div>
+          </article>
+        </main>
+
+      </section>
+      <div id="title" style="text-align: center;">
+    
+    <hr>
+    <span class="credits left">Project maintained by <a href=""></a></span>
+    <br>
+    <br>
+    <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href=""></a></span>
+
+    <p>&copy; 2024 Tingaldama. All rights reserved.</p>
+  </div>
+    </div>
+  </body>
+</html>

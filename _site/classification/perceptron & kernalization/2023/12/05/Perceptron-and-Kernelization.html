@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Perceptron and kernalization | Tingaldama</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Perceptron and kernalization" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Linear Classifier A linear classifier is a method that classifies data points by computing a linear combination of their features. The decision boundary formed by a linear classifier is a straight line or hyperplane that separates different classes. We have labeld training data: [(\vec{x_1}, y_1), (\vec{x_2}, y_2)….(\vec{x_n}, y_n)] Decision boundary: [g(\vec{x})=\vec{w} * \vec{x} + w_0 = 0] Linear classifier f(x): [f(\vec{x}) := \begin{cases} +1 &amp; \text{if } g(\vec{x}) \geq 0 -1 &amp; \text{if } g(\vec{x}) &lt; 0 \end{cases} = sign(\vec{w} * \vec{x} + w_0))] Objective function (omit w0): [\arg \min_{\vec{w}} \frac{1}{n} \sum_{i=1}^{n} 1[\text{sign}(\vec{w} \cdot \vec{x_i}) \neq y_i] = \arg \min_{\vec{w}} \sum_{x_i \atop s.t. y_i=+1} 1[\vec{x_i} \cdot \vec{w} &lt; 0] + \sum_{x_i \atop s.t. y_i=-1} 1[\vec{x_i} \cdot \vec{w} \geq 0]] Minimize the average misclassification error across all examples to find the weights. The Perceptron Problem Labelled training data: [S = { (\vec{x_1}, y_1), (\vec{x_2}, y_2), \ldots, (\vec{x_n}, y_n) }] Initialize: [\vec{w}^{(0)} = 0] For t = 1,2,3,… [(\vec{x}, y) \in S \space s.t. \space sign(\vec{w}^(t-1) * \vec{x}) \neq y] [\vec{w}^{(t)} \leftarrow \begin{cases} \vec{w}^{(t-1)} + \vec{x} &amp; \text{if } y = +1 \vec{w}^{(t-1)} - \vec{x} &amp; \text{if } y = -1 \end{cases}] Terminate when there is no such misclassification, but when? Non-linear Decision Boundaries Compared to linear decision boundaries, non-linear decision boundries are more common in real life data. Linear Transformation Non-linearly separable data in the original feature space can be transformed into a higher-dimensional space where it becomes linearly separable Now we have this training data and the decision boundaries is some sort of ellipse [g(\vec{x}) = w_1\vec{x_1}^2 + w_2{x_2}^2 + w_0] But, g can be linear in some space: [\phi(x_1, x_2) \mapsto (x_1, x_2, x_1^2 + x_2^2)] Kernel Methods The kernel method involves mapping data from its original space (which might be low-dimensional and non-linearly separable) to a higher-dimensional space where a linear decision boundary can separate the classes. This mapping is achieved through a function ϕ(x) which transforms the data points. Algorithms capable of operating with kernels include the kernel perceptron, support-vector machines (SVM), Gaussian processes, principal components analysis (PCA), canonical correlation analysis, ridge regression, spectral clustering, linear adaptive filters and many others. [f(x) = w^T\phi(x) + b] Note: Kernel methods can be thought of as instance-based learners, they area also being called ‘lazy learning’ rather than learning some fixed set of parameters corresponding to the features of their inputs, they instead “remember” the 𝑖-th training example and learn for it a corresponding weight 𝑤𝑖 (Wikipedia) The Kernel Trick The kernel trick allows algorithms to operate in the high-dimensional space implicitly, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick. Let $\phi(x)$ represent the feature vector after mapping x to the feature space, the model corresponding to the hyperplane in the feature space can be expressed as: [f(x) = w^T\phi(x) + b] SVM designed to find the optimal decision boundary f(x) by maximizing the margin between the two classes. [\min_{\mathbf{w}, b} \frac{1}{2} |\mathbf{w}|^2 s.t.] [y_i (\mathbf{w}^T \phi(\mathbf{x_i}) + b) \geq 1, \quad i = 1, 2, \ldots, m] The dual problem: [\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})] [s.t.] [\sum_{i=1}^m \alpha_i y_i = 0, \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m] It invovles compute $ \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ This is the inner product of samples xi and xj mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function: [\kappa(\mathbf{x_i}, \mathbf{x_j}) = \langle \phi(\mathbf{x_i}), \phi(\mathbf{x_j}) \rangle = \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})] This is called Kernel trick Therefore we use $\kappa(\mathbf{x_i}, \mathbf{x_j})$ to replace $\phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ above optimization: [\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \kappa(\mathbf{x_i}, \mathbf{x_j}) \quad] s.t. [\sum_{i=1}^m \alpha_i y_i = 0, \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m] After solving, we obtain: [f(x) = \mathbf{w}^T \phi(x) + b = \sum_{i=1}^m \alpha_i y_i \phi(\mathbf{x_i})^T \phi(x) + b = \sum_{i=1}^m \alpha_i y_i \kappa(x, \mathbf{x_i}) + b \quad] The choice of kernel functions: Quadratic Kernel Transform for Data in R^d Explicit Transform (O(d^2)) [\vec{x} \mapsto (x_1^2, \ldots, x_d^2, \sqrt{2} x_1 x_2, \ldots, \sqrt{2} x_{d-1} x_d, \sqrt{2} x_1, \ldots, \sqrt{2} x_d, 1)] Dot Products (O(d)) \[(1 + \vec{x_i} \cdot \vec{x_j})^2\] RBF (Radial Basis Function) Kernel / Gaussian kernel Transform for Data in R^d Explicit Transform: Infinite Dimension! \[\vec{x} \mapsto \left( \frac{(2 / \pi)^{d / 4} \cdot \exp(-\|\vec{x} - \alpha\|^2)}{\alpha \in \mathbb{R}^d} \right)\] Dot Products (O(d)) \[exp\left(-\|\vec{x_i} - \vec{x_j}\|^2\right)\] The Kernel Perceptron From earlier we have: [\vec{w}^{(t)} \leftarrow \vec{w}^{(t-1)} + y \vec{x}] Equivalently: [\vec{w} = \sum_{k=1}^n \alpha_k y_k \vec{x}_k] [\alpha_k \space is \space the \space number \space of \space times \space \vec{x}_k \space was \space misclassified] The classification becomes: [f(\vec{x}) := \text{sign}(\vec{w} \cdot \vec{x}) = \text{sign}\left(\vec{x} \cdot \sum_{k=1}^n \alpha_k y_k \vec{x}k \right) = \text{sign}\left(\sum{k=1}^n \alpha_k y_k (\vec{x}_k \cdot \vec{x}) \right)] In the transformed space, it would become: [f(\phi(\vec{x})) := \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x})) \right)] [\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x}))] [\phi(\vec{x}_k) \cdot \phi(\vec{x})] dot products are a measure of similarity Can be replaced by any user-defined measure of similarity! Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost." />
+<meta property="og:description" content="The Linear Classifier A linear classifier is a method that classifies data points by computing a linear combination of their features. The decision boundary formed by a linear classifier is a straight line or hyperplane that separates different classes. We have labeld training data: [(\vec{x_1}, y_1), (\vec{x_2}, y_2)….(\vec{x_n}, y_n)] Decision boundary: [g(\vec{x})=\vec{w} * \vec{x} + w_0 = 0] Linear classifier f(x): [f(\vec{x}) := \begin{cases} +1 &amp; \text{if } g(\vec{x}) \geq 0 -1 &amp; \text{if } g(\vec{x}) &lt; 0 \end{cases} = sign(\vec{w} * \vec{x} + w_0))] Objective function (omit w0): [\arg \min_{\vec{w}} \frac{1}{n} \sum_{i=1}^{n} 1[\text{sign}(\vec{w} \cdot \vec{x_i}) \neq y_i] = \arg \min_{\vec{w}} \sum_{x_i \atop s.t. y_i=+1} 1[\vec{x_i} \cdot \vec{w} &lt; 0] + \sum_{x_i \atop s.t. y_i=-1} 1[\vec{x_i} \cdot \vec{w} \geq 0]] Minimize the average misclassification error across all examples to find the weights. The Perceptron Problem Labelled training data: [S = { (\vec{x_1}, y_1), (\vec{x_2}, y_2), \ldots, (\vec{x_n}, y_n) }] Initialize: [\vec{w}^{(0)} = 0] For t = 1,2,3,… [(\vec{x}, y) \in S \space s.t. \space sign(\vec{w}^(t-1) * \vec{x}) \neq y] [\vec{w}^{(t)} \leftarrow \begin{cases} \vec{w}^{(t-1)} + \vec{x} &amp; \text{if } y = +1 \vec{w}^{(t-1)} - \vec{x} &amp; \text{if } y = -1 \end{cases}] Terminate when there is no such misclassification, but when? Non-linear Decision Boundaries Compared to linear decision boundaries, non-linear decision boundries are more common in real life data. Linear Transformation Non-linearly separable data in the original feature space can be transformed into a higher-dimensional space where it becomes linearly separable Now we have this training data and the decision boundaries is some sort of ellipse [g(\vec{x}) = w_1\vec{x_1}^2 + w_2{x_2}^2 + w_0] But, g can be linear in some space: [\phi(x_1, x_2) \mapsto (x_1, x_2, x_1^2 + x_2^2)] Kernel Methods The kernel method involves mapping data from its original space (which might be low-dimensional and non-linearly separable) to a higher-dimensional space where a linear decision boundary can separate the classes. This mapping is achieved through a function ϕ(x) which transforms the data points. Algorithms capable of operating with kernels include the kernel perceptron, support-vector machines (SVM), Gaussian processes, principal components analysis (PCA), canonical correlation analysis, ridge regression, spectral clustering, linear adaptive filters and many others. [f(x) = w^T\phi(x) + b] Note: Kernel methods can be thought of as instance-based learners, they area also being called ‘lazy learning’ rather than learning some fixed set of parameters corresponding to the features of their inputs, they instead “remember” the 𝑖-th training example and learn for it a corresponding weight 𝑤𝑖 (Wikipedia) The Kernel Trick The kernel trick allows algorithms to operate in the high-dimensional space implicitly, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick. Let $\phi(x)$ represent the feature vector after mapping x to the feature space, the model corresponding to the hyperplane in the feature space can be expressed as: [f(x) = w^T\phi(x) + b] SVM designed to find the optimal decision boundary f(x) by maximizing the margin between the two classes. [\min_{\mathbf{w}, b} \frac{1}{2} |\mathbf{w}|^2 s.t.] [y_i (\mathbf{w}^T \phi(\mathbf{x_i}) + b) \geq 1, \quad i = 1, 2, \ldots, m] The dual problem: [\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})] [s.t.] [\sum_{i=1}^m \alpha_i y_i = 0, \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m] It invovles compute $ \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ This is the inner product of samples xi and xj mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function: [\kappa(\mathbf{x_i}, \mathbf{x_j}) = \langle \phi(\mathbf{x_i}), \phi(\mathbf{x_j}) \rangle = \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})] This is called Kernel trick Therefore we use $\kappa(\mathbf{x_i}, \mathbf{x_j})$ to replace $\phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ above optimization: [\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \kappa(\mathbf{x_i}, \mathbf{x_j}) \quad] s.t. [\sum_{i=1}^m \alpha_i y_i = 0, \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m] After solving, we obtain: [f(x) = \mathbf{w}^T \phi(x) + b = \sum_{i=1}^m \alpha_i y_i \phi(\mathbf{x_i})^T \phi(x) + b = \sum_{i=1}^m \alpha_i y_i \kappa(x, \mathbf{x_i}) + b \quad] The choice of kernel functions: Quadratic Kernel Transform for Data in R^d Explicit Transform (O(d^2)) [\vec{x} \mapsto (x_1^2, \ldots, x_d^2, \sqrt{2} x_1 x_2, \ldots, \sqrt{2} x_{d-1} x_d, \sqrt{2} x_1, \ldots, \sqrt{2} x_d, 1)] Dot Products (O(d)) \[(1 + \vec{x_i} \cdot \vec{x_j})^2\] RBF (Radial Basis Function) Kernel / Gaussian kernel Transform for Data in R^d Explicit Transform: Infinite Dimension! \[\vec{x} \mapsto \left( \frac{(2 / \pi)^{d / 4} \cdot \exp(-\|\vec{x} - \alpha\|^2)}{\alpha \in \mathbb{R}^d} \right)\] Dot Products (O(d)) \[exp\left(-\|\vec{x_i} - \vec{x_j}\|^2\right)\] The Kernel Perceptron From earlier we have: [\vec{w}^{(t)} \leftarrow \vec{w}^{(t-1)} + y \vec{x}] Equivalently: [\vec{w} = \sum_{k=1}^n \alpha_k y_k \vec{x}_k] [\alpha_k \space is \space the \space number \space of \space times \space \vec{x}_k \space was \space misclassified] The classification becomes: [f(\vec{x}) := \text{sign}(\vec{w} \cdot \vec{x}) = \text{sign}\left(\vec{x} \cdot \sum_{k=1}^n \alpha_k y_k \vec{x}k \right) = \text{sign}\left(\sum{k=1}^n \alpha_k y_k (\vec{x}_k \cdot \vec{x}) \right)] In the transformed space, it would become: [f(\phi(\vec{x})) := \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x})) \right)] [\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x}))] [\phi(\vec{x}_k) \cdot \phi(\vec{x})] dot products are a measure of similarity Can be replaced by any user-defined measure of similarity! Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost." />
+<link rel="canonical" href="http://localhost:4000/tingaldama/classification/perceptron%20&%20kernalization/2023/12/05/Perceptron-and-Kernelization.html" />
+<meta property="og:url" content="http://localhost:4000/tingaldama/classification/perceptron%20&%20kernalization/2023/12/05/Perceptron-and-Kernelization.html" />
+<meta property="og:site_name" content="Tingaldama" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-12-05T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Perceptron and kernalization" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-12-05T00:00:00+01:00","datePublished":"2023-12-05T00:00:00+01:00","description":"The Linear Classifier A linear classifier is a method that classifies data points by computing a linear combination of their features. The decision boundary formed by a linear classifier is a straight line or hyperplane that separates different classes. We have labeld training data: [(\\vec{x_1}, y_1), (\\vec{x_2}, y_2)….(\\vec{x_n}, y_n)] Decision boundary: [g(\\vec{x})=\\vec{w} * \\vec{x} + w_0 = 0] Linear classifier f(x): [f(\\vec{x}) := \\begin{cases} +1 &amp; \\text{if } g(\\vec{x}) \\geq 0 -1 &amp; \\text{if } g(\\vec{x}) &lt; 0 \\end{cases} = sign(\\vec{w} * \\vec{x} + w_0))] Objective function (omit w0): [\\arg \\min_{\\vec{w}} \\frac{1}{n} \\sum_{i=1}^{n} 1[\\text{sign}(\\vec{w} \\cdot \\vec{x_i}) \\neq y_i] = \\arg \\min_{\\vec{w}} \\sum_{x_i \\atop s.t. y_i=+1} 1[\\vec{x_i} \\cdot \\vec{w} &lt; 0] + \\sum_{x_i \\atop s.t. y_i=-1} 1[\\vec{x_i} \\cdot \\vec{w} \\geq 0]] Minimize the average misclassification error across all examples to find the weights. The Perceptron Problem Labelled training data: [S = { (\\vec{x_1}, y_1), (\\vec{x_2}, y_2), \\ldots, (\\vec{x_n}, y_n) }] Initialize: [\\vec{w}^{(0)} = 0] For t = 1,2,3,… [(\\vec{x}, y) \\in S \\space s.t. \\space sign(\\vec{w}^(t-1) * \\vec{x}) \\neq y] [\\vec{w}^{(t)} \\leftarrow \\begin{cases} \\vec{w}^{(t-1)} + \\vec{x} &amp; \\text{if } y = +1 \\vec{w}^{(t-1)} - \\vec{x} &amp; \\text{if } y = -1 \\end{cases}] Terminate when there is no such misclassification, but when? Non-linear Decision Boundaries Compared to linear decision boundaries, non-linear decision boundries are more common in real life data. Linear Transformation Non-linearly separable data in the original feature space can be transformed into a higher-dimensional space where it becomes linearly separable Now we have this training data and the decision boundaries is some sort of ellipse [g(\\vec{x}) = w_1\\vec{x_1}^2 + w_2{x_2}^2 + w_0] But, g can be linear in some space: [\\phi(x_1, x_2) \\mapsto (x_1, x_2, x_1^2 + x_2^2)] Kernel Methods The kernel method involves mapping data from its original space (which might be low-dimensional and non-linearly separable) to a higher-dimensional space where a linear decision boundary can separate the classes. This mapping is achieved through a function ϕ(x) which transforms the data points. Algorithms capable of operating with kernels include the kernel perceptron, support-vector machines (SVM), Gaussian processes, principal components analysis (PCA), canonical correlation analysis, ridge regression, spectral clustering, linear adaptive filters and many others. [f(x) = w^T\\phi(x) + b] Note: Kernel methods can be thought of as instance-based learners, they area also being called ‘lazy learning’ rather than learning some fixed set of parameters corresponding to the features of their inputs, they instead “remember” the 𝑖-th training example and learn for it a corresponding weight 𝑤𝑖 (Wikipedia) The Kernel Trick The kernel trick allows algorithms to operate in the high-dimensional space implicitly, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick. Let $\\phi(x)$ represent the feature vector after mapping x to the feature space, the model corresponding to the hyperplane in the feature space can be expressed as: [f(x) = w^T\\phi(x) + b] SVM designed to find the optimal decision boundary f(x) by maximizing the margin between the two classes. [\\min_{\\mathbf{w}, b} \\frac{1}{2} |\\mathbf{w}|^2 s.t.] [y_i (\\mathbf{w}^T \\phi(\\mathbf{x_i}) + b) \\geq 1, \\quad i = 1, 2, \\ldots, m] The dual problem: [\\max_{\\alpha} \\sum_{i=1}^m \\alpha_i - \\frac{1}{2} \\sum_{i=1}^m \\sum_{j=1}^m \\alpha_i \\alpha_j y_i y_j \\phi(\\mathbf{x_i})^T \\phi(\\mathbf{x_j})] [s.t.] [\\sum_{i=1}^m \\alpha_i y_i = 0, \\space \\alpha_i \\geq 0, \\quad i = 1, 2, \\ldots, m] It invovles compute $ \\phi(\\mathbf{x_i})^T \\phi(\\mathbf{x_j})$ This is the inner product of samples xi and xj mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function: [\\kappa(\\mathbf{x_i}, \\mathbf{x_j}) = \\langle \\phi(\\mathbf{x_i}), \\phi(\\mathbf{x_j}) \\rangle = \\phi(\\mathbf{x_i})^T \\phi(\\mathbf{x_j})] This is called Kernel trick Therefore we use $\\kappa(\\mathbf{x_i}, \\mathbf{x_j})$ to replace $\\phi(\\mathbf{x_i})^T \\phi(\\mathbf{x_j})$ above optimization: [\\max_{\\alpha} \\sum_{i=1}^m \\alpha_i - \\frac{1}{2} \\sum_{i=1}^m \\sum_{j=1}^m \\alpha_i \\alpha_j y_i y_j \\kappa(\\mathbf{x_i}, \\mathbf{x_j}) \\quad] s.t. [\\sum_{i=1}^m \\alpha_i y_i = 0, \\space \\alpha_i \\geq 0, \\quad i = 1, 2, \\ldots, m] After solving, we obtain: [f(x) = \\mathbf{w}^T \\phi(x) + b = \\sum_{i=1}^m \\alpha_i y_i \\phi(\\mathbf{x_i})^T \\phi(x) + b = \\sum_{i=1}^m \\alpha_i y_i \\kappa(x, \\mathbf{x_i}) + b \\quad] The choice of kernel functions: Quadratic Kernel Transform for Data in R^d Explicit Transform (O(d^2)) [\\vec{x} \\mapsto (x_1^2, \\ldots, x_d^2, \\sqrt{2} x_1 x_2, \\ldots, \\sqrt{2} x_{d-1} x_d, \\sqrt{2} x_1, \\ldots, \\sqrt{2} x_d, 1)] Dot Products (O(d)) \\[(1 + \\vec{x_i} \\cdot \\vec{x_j})^2\\] RBF (Radial Basis Function) Kernel / Gaussian kernel Transform for Data in R^d Explicit Transform: Infinite Dimension! \\[\\vec{x} \\mapsto \\left( \\frac{(2 / \\pi)^{d / 4} \\cdot \\exp(-\\|\\vec{x} - \\alpha\\|^2)}{\\alpha \\in \\mathbb{R}^d} \\right)\\] Dot Products (O(d)) \\[exp\\left(-\\|\\vec{x_i} - \\vec{x_j}\\|^2\\right)\\] The Kernel Perceptron From earlier we have: [\\vec{w}^{(t)} \\leftarrow \\vec{w}^{(t-1)} + y \\vec{x}] Equivalently: [\\vec{w} = \\sum_{k=1}^n \\alpha_k y_k \\vec{x}_k] [\\alpha_k \\space is \\space the \\space number \\space of \\space times \\space \\vec{x}_k \\space was \\space misclassified] The classification becomes: [f(\\vec{x}) := \\text{sign}(\\vec{w} \\cdot \\vec{x}) = \\text{sign}\\left(\\vec{x} \\cdot \\sum_{k=1}^n \\alpha_k y_k \\vec{x}k \\right) = \\text{sign}\\left(\\sum{k=1}^n \\alpha_k y_k (\\vec{x}_k \\cdot \\vec{x}) \\right)] In the transformed space, it would become: [f(\\phi(\\vec{x})) := \\text{sign}\\left(\\sum_{k=1}^n \\alpha_k y_k (\\phi(\\vec{x}_k) \\cdot \\phi(\\vec{x})) \\right)] [\\sum_{k=1}^n \\alpha_k y_k (\\phi(\\vec{x}_k) \\cdot \\phi(\\vec{x}))] [\\phi(\\vec{x}_k) \\cdot \\phi(\\vec{x})] dot products are a measure of similarity Can be replaced by any user-defined measure of similarity! Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost.","headline":"Perceptron and kernalization","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tingaldama/classification/perceptron%20&%20kernalization/2023/12/05/Perceptron-and-Kernelization.html"},"url":"http://localhost:4000/tingaldama/classification/perceptron%20&%20kernalization/2023/12/05/Perceptron-and-Kernelization.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/tingaldama/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/tingaldama/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/tingaldama/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#353535">
+<meta name="msapplication-navbutton-color" content="#353535">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/tingaldama/favicon.ico" -->
+
+<!-- end custom head snippets -->
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<link rel="shortcut icon" href="/tingaldama//assets/images/favicon.jpg" type="image/x-icon">
+
+
+  </head>
+  <style>
+    .categories{
+  font-weight: bold;
+  color: #949494;
+}
+ .date{
+  font-weight: bold !important;
+  color: #949494 !important;
+}
+
+  </style>
+  <body>
+    
+<div id="header">
+    <nav>
+      <ul>
+        <li class="fork"><a href="/tingaldama/">Home</a></li>
+        <li class="downloads"><a href="/tingaldama/contact">Contacts</a></li>
+        <li class="downloads"><a href="/tingaldama/about">About</a></li>
+        <li class="downloads"><a href="/tingaldama/blog">Blogs</a></li>
+        <li class="downloads"><a href="/tingaldama/mlps-resources">MLOps Resources</a></li>
+        <li class="downloads"><a href="/tingaldama/personal-growth">Personal Growth</a></li>
+          
+      </ul>
+    </nav>
+  </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        
+
+        <main>
+          <article>
+            <h1>Perceptron and kernalization</h1>
+            <div class="post-meta">
+             <span class="date">Date: December 05, 2023</span>
+      <br>
+      <span class="categories">
+        Categories: Classification | Perceptron & Kernalization
+      </span>
+            </div>
+            <br>
+            <div class="post-content">
+              
+              <p>The Linear Classifier</p>
+
+<p>A linear classifier is a method that classifies data points by computing a linear combination of their features. The decision boundary formed by a linear classifier is a straight line or hyperplane that separates different classes.</p>
+
+<p>We have labeld training data:</p>
+
+\[(\vec{x_1}, y_1), (\vec{x_2}, y_2)....(\vec{x_n}, y_n)\]
+
+<p>Decision boundary:</p>
+
+\[g(\vec{x})=\vec{w} * \vec{x} + w_0 = 0\]
+
+<p>Linear classifier f(x):</p>
+
+\[f(\vec{x}) := \begin{cases}
++1 &amp; \text{if } g(\vec{x}) \geq 0 \\
+-1 &amp; \text{if } g(\vec{x}) &lt; 0 \end{cases} = sign(\vec{w} * \vec{x} + w_0))\]
+
+<p>Objective function (omit w0):</p>
+
+\[\arg \min_{\vec{w}} \frac{1}{n} \sum_{i=1}^{n} 1[\text{sign}(\vec{w} \cdot \vec{x_i}) \neq y_i]
+
+= \arg \min_{\vec{w}} \sum_{x_i \atop s.t. y_i=+1} 1[\vec{x_i} \cdot \vec{w} &lt; 0] + \sum_{x_i \atop s.t. y_i=-1} 1[\vec{x_i} \cdot \vec{w} \geq 0]\]
+
+<p>Minimize the average misclassification error across all examples to find the weights.</p>
+
+<h3 id="the-perceptron-problem">The Perceptron Problem</h3>
+
+<p>Labelled training data:</p>
+
+\[S = \{ (\vec{x_1}, y_1), (\vec{x_2}, y_2), \ldots, (\vec{x_n}, y_n) \}\]
+
+<p>Initialize:</p>
+
+\[\vec{w}^{(0)} = 0\]
+
+<p>For t = 1,2,3,…</p>
+
+\[(\vec{x}, y) \in S \space s.t. \space sign(\vec{w}^(t-1) * \vec{x}) \neq y\]
+
+\[\vec{w}^{(t)} \leftarrow \begin{cases}
+\vec{w}^{(t-1)} + \vec{x} &amp; \text{if } y = +1 \\
+\vec{w}^{(t-1)} - \vec{x} &amp; \text{if } y = -1
+\end{cases}\]
+
+<p>Terminate when there is no such misclassification, but when?</p>
+
+<h2 id="non-linear-decision-boundaries">Non-linear Decision Boundaries</h2>
+
+<p>Compared to linear decision boundaries, non-linear decision boundries are more common in real life data.</p>
+
+<h3 id="linear-transformation">Linear Transformation</h3>
+
+<p>Non-linearly separable data in the original feature space can be transformed into a higher-dimensional space where it becomes linearly separable</p>
+
+<p><img src="image/2022-12-05-Perceptron-and-Kernelization/1718383521601.png" alt="1718383521601" /></p>
+
+<p>Now we have this training data and the decision boundaries is some sort of ellipse</p>
+
+\[g(\vec{x}) = w_1*\vec{x_1}^2 + w_2*{x_2}^2 + w_0\]
+
+<p>But, g can be linear in some space:</p>
+
+\[\phi(x_1, x_2) \mapsto (x_1, x_2, x_1^2 + x_2^2)\]
+
+<p><img src="image/2022-12-05-Perceptron-and-Kernelization/1718383530487.png" alt="1718383530487" /></p>
+
+<h3 id="kernel-methods">Kernel Methods</h3>
+
+<p>The kernel method involves mapping data from its original space (which might be low-dimensional and non-linearly separable) to a higher-dimensional space where a linear decision boundary can separate the classes. This mapping is achieved through a function ϕ(x) which transforms the data points.  Algorithms capable of operating with kernels include the <a href="https://en.wikipedia.org/wiki/Kernel_perceptron" title="Kernel perceptron">kernel perceptron</a>, support-vector machines (SVM), <a href="https://en.wikipedia.org/wiki/Gaussian_process">Gaussian processes</a>, <a href="https://en.wikipedia.org/wiki/Principal_components_analysis" title="Principal components analysis">principal components analysis</a> (PCA), <a href="https://en.wikipedia.org/wiki/Canonical_correlation_analysis" title="Canonical correlation analysis">canonical correlation analysis</a>, <a href="https://en.wikipedia.org/wiki/Ridge_regression" title="Ridge regression">ridge regression</a>, <a href="https://en.wikipedia.org/wiki/Spectral_clustering" title="Spectral clustering">spectral clustering</a>, <a href="https://en.wikipedia.org/wiki/Adaptive_filter" title="Adaptive filter">linear adaptive filters</a> and many others.</p>
+
+\[f(x) = w^T\phi(x) + b\]
+
+<p>Note: Kernel methods can be thought of as <a href="https://en.wikipedia.org/wiki/Instance-based_learning" title="Instance-based learning">instance-based learners</a>, they area also being called ‘lazy learning’ rather than learning some fixed set of parameters corresponding to the features of their inputs, they instead “remember” the 𝑖<img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/add78d8608ad86e54951b8c8bd6c8d8416533d20" alt="{\displaystyle i}" />-th training example and learn for it a corresponding weight 𝑤𝑖 (Wikipedia)</p>
+
+<h4 id="the-kernel-trick">The Kernel Trick</h4>
+
+<p>The kernel trick allows algorithms to operate in the high-dimensional space <strong>implicitly</strong>, making it computationally feasible to find a linear decision boundary. Explicitly working in generic Kernel space takes time O(n). But the dot product between two data points in kernel space can be computed really quick, which is the point of the kernel trick.</p>
+
+<p>Let $\phi(x)$ represent the feature vector after mapping x to the feature space, the model corresponding to the hyperplane in the feature space can be expressed as:</p>
+
+\[f(x) = w^T\phi(x) + b\]
+
+<p>SVM designed to find the optimal decision boundary <strong>f</strong>(<strong>x</strong>) by maximizing the margin between the two classes.</p>
+
+\[\min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 \\
+s.t.\]
+
+\[y_i (\mathbf{w}^T \phi(\mathbf{x_i}) + b) \geq 1, \quad i = 1, 2, \ldots, m\]
+
+<p>The dual problem:</p>
+
+\[\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})\]
+
+\[s.t.\]
+
+\[\sum_{i=1}^m \alpha_i y_i = 0, \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m\]
+
+<p>It invovles compute</p>
+
+<p>$ \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$</p>
+
+<p>This is the inner product of samples xi and xj mapped to the feature space. Since the dimensionality of the feature space can be very high, or even infinite, directly computing it is often difficult. To overcome this obstacle, we can imagine a function:</p>
+
+\[\kappa(\mathbf{x_i}, \mathbf{x_j}) = \langle \phi(\mathbf{x_i}), \phi(\mathbf{x_j}) \rangle = \phi(\mathbf{x_i})^T \phi(\mathbf{x_j})\]
+
+<p>This is called <strong>Kernel trick</strong></p>
+
+<p>Therefore we use $\kappa(\mathbf{x_i}, \mathbf{x_j})$ to replace $\phi(\mathbf{x_i})^T \phi(\mathbf{x_j})$ above optimization:</p>
+
+\[\max_{\alpha} \sum_{i=1}^m \alpha_i - \frac{1}{2} \sum_{i=1}^m \sum_{j=1}^m \alpha_i \alpha_j y_i y_j \kappa(\mathbf{x_i}, \mathbf{x_j}) \quad\]
+
+<p>s.t.</p>
+
+\[\sum_{i=1}^m \alpha_i y_i = 0,  \space \alpha_i \geq 0, \quad i = 1, 2, \ldots, m\]
+
+<p>After solving, we obtain:</p>
+
+\[f(x) = \mathbf{w}^T \phi(x) + b \\
+     = \sum_{i=1}^m \alpha_i y_i \phi(\mathbf{x_i})^T \phi(x) + b \\
+= \sum_{i=1}^m \alpha_i y_i \kappa(x, \mathbf{x_i}) + b \quad\]
+
+<p>The choice of kernel functions:</p>
+
+<ul>
+  <li>
+    <p><em>Quadratic Kernel Transform for Data in R^d</em></p>
+
+    <ul>
+      <li><strong>Explicit Transform</strong> (O(d^2))</li>
+    </ul>
+  </li>
+</ul>
+
+\[\vec{x} \mapsto (x_1^2, \ldots, x_d^2, \sqrt{2} x_1 x_2, \ldots, \sqrt{2} x_{d-1} x_d, \sqrt{2} x_1, \ldots, \sqrt{2} x_d, 1)\]
+
+<ul>
+  <li>
+    <p><strong>Dot Products</strong> (O(d))</p>
+
+\[(1 + \vec{x_i} \cdot \vec{x_j})^2\]
+  </li>
+  <li>
+    <p><strong>RBF (Radial Basis Function) Kernel  / Gaussian kernel Transform for Data in R^d</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>Explicit Transform</strong>: Infinite Dimension!</p>
+
+\[\vec{x} \mapsto \left( \frac{(2 / \pi)^{d / 4} \cdot \exp(-\|\vec{x} - \alpha\|^2)}{\alpha \in \mathbb{R}^d} \right)\]
+      </li>
+      <li>
+        <p><strong>Dot Products</strong> (O(d))</p>
+
+\[exp\left(-\|\vec{x_i} - \vec{x_j}\|^2\right)\]
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="the-kernel-perceptron">The Kernel Perceptron</h4>
+
+<p>From earlier we have:</p>
+
+\[\vec{w}^{(t)} \leftarrow \vec{w}^{(t-1)} + y \vec{x}\]
+
+<p>Equivalently:</p>
+
+\[\vec{w} = \sum_{k=1}^n \alpha_k y_k \vec{x}_k\]
+
+\[\alpha_k \space is \space the \space number \space of \space times \space \vec{x}_k \space was \space misclassified\]
+
+<p>The classification becomes:</p>
+
+\[f(\vec{x}) := \text{sign}(\vec{w} \cdot \vec{x}) = \text{sign}\left(\vec{x} \cdot \sum_{k=1}^n \alpha_k y_k \vec{x}_k \right) = \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\vec{x}_k \cdot \vec{x}) \right)\]
+
+<p>In the transformed space, it would become:</p>
+
+\[f(\phi(\vec{x})) := \text{sign}\left(\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x})) \right)\]
+
+\[\sum_{k=1}^n \alpha_k y_k (\phi(\vec{x}_k) \cdot \phi(\vec{x}))\]
+
+\[\phi(\vec{x}_k) \cdot \phi(\vec{x})\]
+
+<p><strong>dot products are a measure of similarity</strong></p>
+
+<p><strong>Can be replaced by any user-defined measure of similarity!</strong></p>
+
+<p>Therefore, we can work in any user-defined non-linear space implicitly without the potentially heavy computation cost.</p>
+
+            </div>
+          </article>
+        </main>
+
+      </section>
+      <div id="title" style="text-align: center;">
+    
+    <hr>
+    <span class="credits left">Project maintained by <a href=""></a></span>
+    <br>
+    <br>
+    <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href=""></a></span>
+
+    <p>&copy; 2024 Tingaldama. All rights reserved.</p>
+  </div>
+    </div>
+  </body>
+</html>

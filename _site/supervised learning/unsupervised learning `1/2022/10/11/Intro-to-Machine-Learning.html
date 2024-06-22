@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Intro to Machine Learning | Tingaldama</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Intro to Machine Learning" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What is Machine Learning? Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data. Why Do We Need Machine Learning? There are tasks that humans can distinguish but can’t easily hard-code into a program. For example, writing a set of rules to code a cat. Sometimes, we don’t even know the exact task we want to solve and just want to discover patterns in the data. Real-World Applications of Machine Learning Recommendation Systems: Netflix, Amazon, Overstock Stock Prediction: Goldman Sachs, Morgan Stanley Risk Analysis: Credit card companies, Insurance firms Face and Object Recognition: Cameras, Facebook, Microsoft Speech Recognition: Siri, Cortana, Alexa, Dragon Search Engines and Content Filtering: Google, Yahoo, Bing How Do We Approach Machine Learning? Study a prediction problem in an abstract manner and come up with a solution which is applicable to many problems simultaneously. Different types of paradigms and algorithms that have been successful in prediction tasks. How to systematically analyze how good an algorithm is for a prediction task. Types of Paradigms: Supervised Learning: e.g., decision trees, neural networks Unsupervised Learning: e.g., k-means clustering, principal component analysis Reinforcement Learning: e.g., Q-learning, policy gradients Evaluating Algorithms: Use metrics like accuracy, precision, recall, F1 score, AUC-ROC. Techniques like cross-validation. Consider computational complexity, interpretability, and scalability. Supervised Learning vs. Unsupervised Learning Supervised Learning: Data: \[(x_1, y_1), (x_2, y_2), \ldots \in X \times Y\] Assumption: There is a (relatively simple) function: \[f^*: X \to Y\] such that \[f^*(\vec{x}_i) = y_i\] for most i Learning Task: Given $n$ examples, find an approximation: \[\hat{f} \approx f^*\] Goal: It gives mostly correct predictions on unseen examples. Unsupervised Learning: Data: \[x_1, x_2, \ldots \in X\] Assumption: There is underlying strcuture in the data Learning Task: discover the structure given n examples from the data Goal: find the summary of the data using the structure Statistical Modeling Approach for Supervised Learning: Labeled Training Data: \[(x_i, y_i)\] drawn independently from a fixed underlying distribution (i.i.d assumption). Learning Algorithm: Select $\hat{f}$ from a pool of models F that maximize label agreement of the training data. Selection Methods: Maximum likelihood, maximum a posteriori, optimization of ‘loss’ criterion. Classification In classification tasks, the task is to build a function that takes in a vector of features X(also called “inputs”) and predicts a label Y (also called the “class” or “output”). Features are things you know, and the label is what your algorithm is trying to figure out; for example, the label might be a binary variable indicating whether an animal is a cat or a dog, and the features might be the length of the animal’s whiskers, the animal’s weight in pounds, and a binary variable indicating whether the animal’s ears stick up or are droopy. Your algorithm needs to tell dogs and cats apart (Y) using only this information about weight, whiskers, and ears (X). The classifier Joint Input/Output Space: \(X \times Y\) Data Distribution: \(D(X \times Y)\) Classifier: \(f: X \rightarrow Y\) Goal: Maximize the accuracy of the classifier: \(\text{acc}(f) := P_{(x,y)}[f(x) = y] = E_{(x,y)}[1[f(x) = y]]\) We want a classifier that maximize acc Generative Classifier A model with form [p(x,y)= p(y)p(x\vert y)] is called a generative classifier, since it can be used to generate examples x from each class y. Examples of generative classifier: Native Bayes Classifier Gaussian Mixture Model (GMM) Bayes classifier: [f(\vec{x}) = \arg\max_{y \in Y} P[Y = y X = \vec{x}]] Bayes’ Theorem Bayes’ theorem connects these two concepts: [P(Y X) = \frac{P(X Y) \cdot P(Y)}{P(X)}] Discriminative Classifier A model of form [p(y \vert x)] is classed a discriminative classifier. It works by modeling the decision boundary directly between classes without explicitly computing the joint or conditional probabilities. Instead of modeling how data is generated, discriminative classifiers focus on learning the relationship between the features and the labels. Examples of discriminative classifier: Logistic Regression Support Vector Machines (SVM) Neural Networks Maximum Likelihood Estimation (MLE) In statistics, maximum likelihood estimation (MLE) is a method of estimating the parameters of an assumed probability distribution, given some observed data. This is achieved by maximizing a likelihood function so that, under the assumed statistical model, the observed data is most probable. [(\theta X) := P(X \theta) = P(\vec{x}_1, \ldots, \vec{x}_n \theta) = \prod_{i=1}^{n} P(\vec{x}_i \theta) = \prod_{i=1}^{n} p_{\theta}(\vec{x}_i)] [\hat{\theta}{\text{MLE}} = \arg\max{\theta} L(\theta X) = \arg\max_{\theta} P(X \theta) = \arg\max_{\theta} \prod_{i=1}^{n} P(\vec{x}_i \theta) = \arg\max_{\theta} \prod_{i=1}^{n} p_{\theta}(\vec{x}_i)] Case Study: Email Classification with Bayes Classifier We want to classify emails as “spam” or “not spam” based on features like the presence of certain words, email length, etc. Data Features (X): Presence of words (e.g., “free”, “win”, “click”), email length, number of links, etc. Labels (Y): “spam” or “not spam” Step 1: Bayes Classifier The Bayes classifier aims to find the class y(spam or not spam) that maximizes the posterior probability [P(Y = y \mid X = x)] which is: [f(x) = \arg\max_{y \in { \text{spam, not spam} }} P(Y = y \mid X = x)] Using Bayes’ theorem: [P(Y = y \mid X = x) = \frac{P(X = x \mid Y = y) \cdot P(Y = y)}{P(X = x)}] For classification purposes, we can ignore $P(X = x)$ because it is the same for both classes: [f(x) = \arg\max_{y \in { \text{spam, not spam} }} P(X = x \mid Y = y) \cdot P(Y = y)] Step 2: Estimating Probabilities Using MLE Estimating Prior Probability [P(Y = \text{spam}) = \frac{\text{Number of spam emails}}{\text{Total number of emails}}] [P(Y = \text{not spam}) = \frac{\text{Number of not spam emails}}{\text{Total number of emails}}] Estimating Likelihood We assume that the features X(e.g., presence of words) follow a certain distribution. For simplicity, let’s assume that the features are binary (presence or absence of certain words) and follow a Bernoulli distribution. For each feature $x_i$ [P(X_i = 1 \mid Y = \text{spam}) = \theta_{i,\text{spam}}] [P(X_i = 0 \mid Y = \text{spam}) = 1 - \theta_{i,\text{spam}}] $\theta_{i,\text{spam}}$ that represents the probability of the word being present in a spam email MLE for Bernoulli Distribution For a binary feature [L(\theta_{i,\text{spam}}) = \prod_{j=1}^{n} \theta_{i,\text{spam}}^{x_{ij}} (1 - \theta_{i,\text{spam}})^{1 - x_{ij}}] The log-likelihood is: [\log L(\theta_{i,\text{spam}}) = \sum_{j=1}^{n} \left[ x_{ij} \log \theta_{i,\text{spam}} + (1 - x_{ij}) \log (1 - \theta_{i,\text{spam}}) \right]] Taking the derivative with respect to [\theta_{i,\text{spam}}] and setting it to zero: [\frac{\partial}{\partial \theta_{i,\text{spam}}} \log L(\theta_{i,\text{spam}}) = \sum_{j=1}^{n} \left[ \frac{x_{ij}}{\theta_{i,\text{spam}}} - \frac{1 - x_{ij}}{1 - \theta_{i,\text{spam}}} \right] = 0] Solving for [\theta_{i,\text{spam}}] [\hat{\theta}{i,\text{spam}} = \frac{\sum{j=1}^{n} x_{ij}}{n}] Step 3: Applying Bayes Classifier with MLE Estimates Using the estimated probabilities: [f(x) = \arg\max_{y \in { \text{spam, not spam} }} \left( P(X = x \mid Y = y) \cdot P(Y = y) \right)] For each class y: [P(X = x \mid Y = y) = \prod_{i=1}^{m} \hat{\theta}{i,y}^{x_i} (1 - \hat{\theta}{i,y})^{1 - x_i}] Step 4: Selecting the Predicted Label Calculate the posterior probability for each class and select the class with the highest probability: [\hat{y} = \arg\max_{y \in { \text{spam, not spam} }} \left( P(X = x_{\text{new}} \mid Y = y) \cdot P(Y = y) \right)]" />
+<meta property="og:description" content="What is Machine Learning? Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data. Why Do We Need Machine Learning? There are tasks that humans can distinguish but can’t easily hard-code into a program. For example, writing a set of rules to code a cat. Sometimes, we don’t even know the exact task we want to solve and just want to discover patterns in the data. Real-World Applications of Machine Learning Recommendation Systems: Netflix, Amazon, Overstock Stock Prediction: Goldman Sachs, Morgan Stanley Risk Analysis: Credit card companies, Insurance firms Face and Object Recognition: Cameras, Facebook, Microsoft Speech Recognition: Siri, Cortana, Alexa, Dragon Search Engines and Content Filtering: Google, Yahoo, Bing How Do We Approach Machine Learning? Study a prediction problem in an abstract manner and come up with a solution which is applicable to many problems simultaneously. Different types of paradigms and algorithms that have been successful in prediction tasks. How to systematically analyze how good an algorithm is for a prediction task. Types of Paradigms: Supervised Learning: e.g., decision trees, neural networks Unsupervised Learning: e.g., k-means clustering, principal component analysis Reinforcement Learning: e.g., Q-learning, policy gradients Evaluating Algorithms: Use metrics like accuracy, precision, recall, F1 score, AUC-ROC. Techniques like cross-validation. Consider computational complexity, interpretability, and scalability. Supervised Learning vs. Unsupervised Learning Supervised Learning: Data: \[(x_1, y_1), (x_2, y_2), \ldots \in X \times Y\] Assumption: There is a (relatively simple) function: \[f^*: X \to Y\] such that \[f^*(\vec{x}_i) = y_i\] for most i Learning Task: Given $n$ examples, find an approximation: \[\hat{f} \approx f^*\] Goal: It gives mostly correct predictions on unseen examples. Unsupervised Learning: Data: \[x_1, x_2, \ldots \in X\] Assumption: There is underlying strcuture in the data Learning Task: discover the structure given n examples from the data Goal: find the summary of the data using the structure Statistical Modeling Approach for Supervised Learning: Labeled Training Data: \[(x_i, y_i)\] drawn independently from a fixed underlying distribution (i.i.d assumption). Learning Algorithm: Select $\hat{f}$ from a pool of models F that maximize label agreement of the training data. Selection Methods: Maximum likelihood, maximum a posteriori, optimization of ‘loss’ criterion. Classification In classification tasks, the task is to build a function that takes in a vector of features X(also called “inputs”) and predicts a label Y (also called the “class” or “output”). Features are things you know, and the label is what your algorithm is trying to figure out; for example, the label might be a binary variable indicating whether an animal is a cat or a dog, and the features might be the length of the animal’s whiskers, the animal’s weight in pounds, and a binary variable indicating whether the animal’s ears stick up or are droopy. Your algorithm needs to tell dogs and cats apart (Y) using only this information about weight, whiskers, and ears (X). The classifier Joint Input/Output Space: \(X \times Y\) Data Distribution: \(D(X \times Y)\) Classifier: \(f: X \rightarrow Y\) Goal: Maximize the accuracy of the classifier: \(\text{acc}(f) := P_{(x,y)}[f(x) = y] = E_{(x,y)}[1[f(x) = y]]\) We want a classifier that maximize acc Generative Classifier A model with form [p(x,y)= p(y)p(x\vert y)] is called a generative classifier, since it can be used to generate examples x from each class y. Examples of generative classifier: Native Bayes Classifier Gaussian Mixture Model (GMM) Bayes classifier: [f(\vec{x}) = \arg\max_{y \in Y} P[Y = y X = \vec{x}]] Bayes’ Theorem Bayes’ theorem connects these two concepts: [P(Y X) = \frac{P(X Y) \cdot P(Y)}{P(X)}] Discriminative Classifier A model of form [p(y \vert x)] is classed a discriminative classifier. It works by modeling the decision boundary directly between classes without explicitly computing the joint or conditional probabilities. Instead of modeling how data is generated, discriminative classifiers focus on learning the relationship between the features and the labels. Examples of discriminative classifier: Logistic Regression Support Vector Machines (SVM) Neural Networks Maximum Likelihood Estimation (MLE) In statistics, maximum likelihood estimation (MLE) is a method of estimating the parameters of an assumed probability distribution, given some observed data. This is achieved by maximizing a likelihood function so that, under the assumed statistical model, the observed data is most probable. [(\theta X) := P(X \theta) = P(\vec{x}_1, \ldots, \vec{x}_n \theta) = \prod_{i=1}^{n} P(\vec{x}_i \theta) = \prod_{i=1}^{n} p_{\theta}(\vec{x}_i)] [\hat{\theta}{\text{MLE}} = \arg\max{\theta} L(\theta X) = \arg\max_{\theta} P(X \theta) = \arg\max_{\theta} \prod_{i=1}^{n} P(\vec{x}_i \theta) = \arg\max_{\theta} \prod_{i=1}^{n} p_{\theta}(\vec{x}_i)] Case Study: Email Classification with Bayes Classifier We want to classify emails as “spam” or “not spam” based on features like the presence of certain words, email length, etc. Data Features (X): Presence of words (e.g., “free”, “win”, “click”), email length, number of links, etc. Labels (Y): “spam” or “not spam” Step 1: Bayes Classifier The Bayes classifier aims to find the class y(spam or not spam) that maximizes the posterior probability [P(Y = y \mid X = x)] which is: [f(x) = \arg\max_{y \in { \text{spam, not spam} }} P(Y = y \mid X = x)] Using Bayes’ theorem: [P(Y = y \mid X = x) = \frac{P(X = x \mid Y = y) \cdot P(Y = y)}{P(X = x)}] For classification purposes, we can ignore $P(X = x)$ because it is the same for both classes: [f(x) = \arg\max_{y \in { \text{spam, not spam} }} P(X = x \mid Y = y) \cdot P(Y = y)] Step 2: Estimating Probabilities Using MLE Estimating Prior Probability [P(Y = \text{spam}) = \frac{\text{Number of spam emails}}{\text{Total number of emails}}] [P(Y = \text{not spam}) = \frac{\text{Number of not spam emails}}{\text{Total number of emails}}] Estimating Likelihood We assume that the features X(e.g., presence of words) follow a certain distribution. For simplicity, let’s assume that the features are binary (presence or absence of certain words) and follow a Bernoulli distribution. For each feature $x_i$ [P(X_i = 1 \mid Y = \text{spam}) = \theta_{i,\text{spam}}] [P(X_i = 0 \mid Y = \text{spam}) = 1 - \theta_{i,\text{spam}}] $\theta_{i,\text{spam}}$ that represents the probability of the word being present in a spam email MLE for Bernoulli Distribution For a binary feature [L(\theta_{i,\text{spam}}) = \prod_{j=1}^{n} \theta_{i,\text{spam}}^{x_{ij}} (1 - \theta_{i,\text{spam}})^{1 - x_{ij}}] The log-likelihood is: [\log L(\theta_{i,\text{spam}}) = \sum_{j=1}^{n} \left[ x_{ij} \log \theta_{i,\text{spam}} + (1 - x_{ij}) \log (1 - \theta_{i,\text{spam}}) \right]] Taking the derivative with respect to [\theta_{i,\text{spam}}] and setting it to zero: [\frac{\partial}{\partial \theta_{i,\text{spam}}} \log L(\theta_{i,\text{spam}}) = \sum_{j=1}^{n} \left[ \frac{x_{ij}}{\theta_{i,\text{spam}}} - \frac{1 - x_{ij}}{1 - \theta_{i,\text{spam}}} \right] = 0] Solving for [\theta_{i,\text{spam}}] [\hat{\theta}{i,\text{spam}} = \frac{\sum{j=1}^{n} x_{ij}}{n}] Step 3: Applying Bayes Classifier with MLE Estimates Using the estimated probabilities: [f(x) = \arg\max_{y \in { \text{spam, not spam} }} \left( P(X = x \mid Y = y) \cdot P(Y = y) \right)] For each class y: [P(X = x \mid Y = y) = \prod_{i=1}^{m} \hat{\theta}{i,y}^{x_i} (1 - \hat{\theta}{i,y})^{1 - x_i}] Step 4: Selecting the Predicted Label Calculate the posterior probability for each class and select the class with the highest probability: [\hat{y} = \arg\max_{y \in { \text{spam, not spam} }} \left( P(X = x_{\text{new}} \mid Y = y) \cdot P(Y = y) \right)]" />
+<link rel="canonical" href="http://localhost:4000/tingaldama/supervised%20learning/unsupervised%20learning%20%601/2022/10/11/Intro-to-Machine-Learning.html" />
+<meta property="og:url" content="http://localhost:4000/tingaldama/supervised%20learning/unsupervised%20learning%20%601/2022/10/11/Intro-to-Machine-Learning.html" />
+<meta property="og:site_name" content="Tingaldama" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-11T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Intro to Machine Learning" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-11T00:00:00+01:00","datePublished":"2022-10-11T00:00:00+01:00","description":"What is Machine Learning? Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data. Why Do We Need Machine Learning? There are tasks that humans can distinguish but can’t easily hard-code into a program. For example, writing a set of rules to code a cat. Sometimes, we don’t even know the exact task we want to solve and just want to discover patterns in the data. Real-World Applications of Machine Learning Recommendation Systems: Netflix, Amazon, Overstock Stock Prediction: Goldman Sachs, Morgan Stanley Risk Analysis: Credit card companies, Insurance firms Face and Object Recognition: Cameras, Facebook, Microsoft Speech Recognition: Siri, Cortana, Alexa, Dragon Search Engines and Content Filtering: Google, Yahoo, Bing How Do We Approach Machine Learning? Study a prediction problem in an abstract manner and come up with a solution which is applicable to many problems simultaneously. Different types of paradigms and algorithms that have been successful in prediction tasks. How to systematically analyze how good an algorithm is for a prediction task. Types of Paradigms: Supervised Learning: e.g., decision trees, neural networks Unsupervised Learning: e.g., k-means clustering, principal component analysis Reinforcement Learning: e.g., Q-learning, policy gradients Evaluating Algorithms: Use metrics like accuracy, precision, recall, F1 score, AUC-ROC. Techniques like cross-validation. Consider computational complexity, interpretability, and scalability. Supervised Learning vs. Unsupervised Learning Supervised Learning: Data: \\[(x_1, y_1), (x_2, y_2), \\ldots \\in X \\times Y\\] Assumption: There is a (relatively simple) function: \\[f^*: X \\to Y\\] such that \\[f^*(\\vec{x}_i) = y_i\\] for most i Learning Task: Given $n$ examples, find an approximation: \\[\\hat{f} \\approx f^*\\] Goal: It gives mostly correct predictions on unseen examples. Unsupervised Learning: Data: \\[x_1, x_2, \\ldots \\in X\\] Assumption: There is underlying strcuture in the data Learning Task: discover the structure given n examples from the data Goal: find the summary of the data using the structure Statistical Modeling Approach for Supervised Learning: Labeled Training Data: \\[(x_i, y_i)\\] drawn independently from a fixed underlying distribution (i.i.d assumption). Learning Algorithm: Select $\\hat{f}$ from a pool of models F that maximize label agreement of the training data. Selection Methods: Maximum likelihood, maximum a posteriori, optimization of ‘loss’ criterion. Classification In classification tasks, the task is to build a function that takes in a vector of features X(also called “inputs”) and predicts a label Y (also called the “class” or “output”). Features are things you know, and the label is what your algorithm is trying to figure out; for example, the label might be a binary variable indicating whether an animal is a cat or a dog, and the features might be the length of the animal’s whiskers, the animal’s weight in pounds, and a binary variable indicating whether the animal’s ears stick up or are droopy. Your algorithm needs to tell dogs and cats apart (Y) using only this information about weight, whiskers, and ears (X). The classifier Joint Input/Output Space: \\(X \\times Y\\) Data Distribution: \\(D(X \\times Y)\\) Classifier: \\(f: X \\rightarrow Y\\) Goal: Maximize the accuracy of the classifier: \\(\\text{acc}(f) := P_{(x,y)}[f(x) = y] = E_{(x,y)}[1[f(x) = y]]\\) We want a classifier that maximize acc Generative Classifier A model with form [p(x,y)= p(y)p(x\\vert y)] is called a generative classifier, since it can be used to generate examples x from each class y. Examples of generative classifier: Native Bayes Classifier Gaussian Mixture Model (GMM) Bayes classifier: [f(\\vec{x}) = \\arg\\max_{y \\in Y} P[Y = y X = \\vec{x}]] Bayes’ Theorem Bayes’ theorem connects these two concepts: [P(Y X) = \\frac{P(X Y) \\cdot P(Y)}{P(X)}] Discriminative Classifier A model of form [p(y \\vert x)] is classed a discriminative classifier. It works by modeling the decision boundary directly between classes without explicitly computing the joint or conditional probabilities. Instead of modeling how data is generated, discriminative classifiers focus on learning the relationship between the features and the labels. Examples of discriminative classifier: Logistic Regression Support Vector Machines (SVM) Neural Networks Maximum Likelihood Estimation (MLE) In statistics, maximum likelihood estimation (MLE) is a method of estimating the parameters of an assumed probability distribution, given some observed data. This is achieved by maximizing a likelihood function so that, under the assumed statistical model, the observed data is most probable. [(\\theta X) := P(X \\theta) = P(\\vec{x}_1, \\ldots, \\vec{x}_n \\theta) = \\prod_{i=1}^{n} P(\\vec{x}_i \\theta) = \\prod_{i=1}^{n} p_{\\theta}(\\vec{x}_i)] [\\hat{\\theta}{\\text{MLE}} = \\arg\\max{\\theta} L(\\theta X) = \\arg\\max_{\\theta} P(X \\theta) = \\arg\\max_{\\theta} \\prod_{i=1}^{n} P(\\vec{x}_i \\theta) = \\arg\\max_{\\theta} \\prod_{i=1}^{n} p_{\\theta}(\\vec{x}_i)] Case Study: Email Classification with Bayes Classifier We want to classify emails as “spam” or “not spam” based on features like the presence of certain words, email length, etc. Data Features (X): Presence of words (e.g., “free”, “win”, “click”), email length, number of links, etc. Labels (Y): “spam” or “not spam” Step 1: Bayes Classifier The Bayes classifier aims to find the class y(spam or not spam) that maximizes the posterior probability [P(Y = y \\mid X = x)] which is: [f(x) = \\arg\\max_{y \\in { \\text{spam, not spam} }} P(Y = y \\mid X = x)] Using Bayes’ theorem: [P(Y = y \\mid X = x) = \\frac{P(X = x \\mid Y = y) \\cdot P(Y = y)}{P(X = x)}] For classification purposes, we can ignore $P(X = x)$ because it is the same for both classes: [f(x) = \\arg\\max_{y \\in { \\text{spam, not spam} }} P(X = x \\mid Y = y) \\cdot P(Y = y)] Step 2: Estimating Probabilities Using MLE Estimating Prior Probability [P(Y = \\text{spam}) = \\frac{\\text{Number of spam emails}}{\\text{Total number of emails}}] [P(Y = \\text{not spam}) = \\frac{\\text{Number of not spam emails}}{\\text{Total number of emails}}] Estimating Likelihood We assume that the features X(e.g., presence of words) follow a certain distribution. For simplicity, let’s assume that the features are binary (presence or absence of certain words) and follow a Bernoulli distribution. For each feature $x_i$ [P(X_i = 1 \\mid Y = \\text{spam}) = \\theta_{i,\\text{spam}}] [P(X_i = 0 \\mid Y = \\text{spam}) = 1 - \\theta_{i,\\text{spam}}] $\\theta_{i,\\text{spam}}$ that represents the probability of the word being present in a spam email MLE for Bernoulli Distribution For a binary feature [L(\\theta_{i,\\text{spam}}) = \\prod_{j=1}^{n} \\theta_{i,\\text{spam}}^{x_{ij}} (1 - \\theta_{i,\\text{spam}})^{1 - x_{ij}}] The log-likelihood is: [\\log L(\\theta_{i,\\text{spam}}) = \\sum_{j=1}^{n} \\left[ x_{ij} \\log \\theta_{i,\\text{spam}} + (1 - x_{ij}) \\log (1 - \\theta_{i,\\text{spam}}) \\right]] Taking the derivative with respect to [\\theta_{i,\\text{spam}}] and setting it to zero: [\\frac{\\partial}{\\partial \\theta_{i,\\text{spam}}} \\log L(\\theta_{i,\\text{spam}}) = \\sum_{j=1}^{n} \\left[ \\frac{x_{ij}}{\\theta_{i,\\text{spam}}} - \\frac{1 - x_{ij}}{1 - \\theta_{i,\\text{spam}}} \\right] = 0] Solving for [\\theta_{i,\\text{spam}}] [\\hat{\\theta}{i,\\text{spam}} = \\frac{\\sum{j=1}^{n} x_{ij}}{n}] Step 3: Applying Bayes Classifier with MLE Estimates Using the estimated probabilities: [f(x) = \\arg\\max_{y \\in { \\text{spam, not spam} }} \\left( P(X = x \\mid Y = y) \\cdot P(Y = y) \\right)] For each class y: [P(X = x \\mid Y = y) = \\prod_{i=1}^{m} \\hat{\\theta}{i,y}^{x_i} (1 - \\hat{\\theta}{i,y})^{1 - x_i}] Step 4: Selecting the Predicted Label Calculate the posterior probability for each class and select the class with the highest probability: [\\hat{y} = \\arg\\max_{y \\in { \\text{spam, not spam} }} \\left( P(X = x_{\\text{new}} \\mid Y = y) \\cdot P(Y = y) \\right)]","headline":"Intro to Machine Learning","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tingaldama/supervised%20learning/unsupervised%20learning%20%601/2022/10/11/Intro-to-Machine-Learning.html"},"url":"http://localhost:4000/tingaldama/supervised%20learning/unsupervised%20learning%20%601/2022/10/11/Intro-to-Machine-Learning.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/tingaldama/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/tingaldama/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/tingaldama/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#353535">
+<meta name="msapplication-navbutton-color" content="#353535">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/tingaldama/favicon.ico" -->
+
+<!-- end custom head snippets -->
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<link rel="shortcut icon" href="/tingaldama//assets/images/favicon.jpg" type="image/x-icon">
+
+
+  </head>
+  <style>
+    .categories{
+  font-weight: bold;
+  color: #949494;
+}
+ .date{
+  font-weight: bold !important;
+  color: #949494 !important;
+}
+
+  </style>
+  <body>
+    
+<div id="header">
+    <nav>
+      <ul>
+        <li class="fork"><a href="/tingaldama/">Home</a></li>
+        <li class="downloads"><a href="/tingaldama/contact">Contacts</a></li>
+        <li class="downloads"><a href="/tingaldama/about">About</a></li>
+        <li class="downloads"><a href="/tingaldama/blog">Blogs</a></li>
+        <li class="downloads"><a href="/tingaldama/mlps-resources">MLOps Resources</a></li>
+        <li class="downloads"><a href="/tingaldama/personal-growth">Personal Growth</a></li>
+          
+      </ul>
+    </nav>
+  </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        
+
+        <main>
+          <article>
+            <h1>Intro to Machine Learning</h1>
+            <div class="post-meta">
+             <span class="date">Date: October 11, 2022</span>
+      <br>
+      <span class="categories">
+        Categories: Supervised Learning | Unsupervised Learning `1
+      </span>
+            </div>
+            <br>
+            <div class="post-content">
+              
+              <h3 id="what-is-machine-learning">What is Machine Learning?</h3>
+
+<p>Machine Learning is the study of making machines learn a concept without explicitly programming it. It involves building algorithms that can learn from input data to make predictions or find patterns in the data.</p>
+
+<h3 id="why-do-we-need-machine-learning">Why Do We Need Machine Learning?</h3>
+
+<p>There are tasks that humans can distinguish but can’t easily hard-code into a program.</p>
+
+<p>For example, writing a set of rules to code a cat.</p>
+
+<p>Sometimes, we don’t even know the exact task we want to solve and just want to discover patterns in the data.</p>
+
+<h3 id="real-world-applications-of-machine-learning">Real-World Applications of Machine Learning</h3>
+
+<ul>
+  <li><strong>Recommendation Systems:</strong> Netflix, Amazon, Overstock</li>
+  <li><strong>Stock Prediction:</strong> Goldman Sachs, Morgan Stanley</li>
+  <li><strong>Risk Analysis:</strong> Credit card companies, Insurance firms</li>
+  <li><strong>Face and Object Recognition:</strong> Cameras, Facebook, Microsoft</li>
+  <li><strong>Speech Recognition:</strong> Siri, Cortana, Alexa, Dragon</li>
+  <li><strong>Search Engines and Content Filtering:</strong> Google, Yahoo, Bing</li>
+</ul>
+
+<h3 id="how-do-we-approach-machine-learning">How Do We Approach Machine Learning?</h3>
+
+<p>Study a prediction problem in an <strong>abstract manner</strong> and come up with a solution which is applicable to many problems simultaneously.</p>
+
+<p>Different types of <strong>paradigms and algorithms</strong> that have been successful in prediction tasks.</p>
+
+<p>How to <strong>systematically analyze</strong> how good an algorithm is for a prediction task.</p>
+
+<p><strong>Types of Paradigms:</strong></p>
+
+<ul>
+  <li><strong>Supervised Learning:</strong> e.g., decision trees, neural networks</li>
+  <li><strong>Unsupervised Learning:</strong> e.g., k-means clustering, principal component analysis</li>
+  <li><strong>Reinforcement Learning:</strong> e.g., Q-learning, policy gradients</li>
+</ul>
+
+<p><strong>Evaluating Algorithms:</strong></p>
+
+<ul>
+  <li>Use metrics like accuracy, precision, recall, F1 score, AUC-ROC.</li>
+  <li>Techniques like cross-validation.</li>
+  <li>Consider computational complexity, interpretability, and scalability.</li>
+</ul>
+
+<hr />
+
+<h2 id="supervised-learning-vs-unsupervised-learning">Supervised Learning vs. Unsupervised Learning</h2>
+
+<p>Supervised Learning:</p>
+
+<ul>
+  <li>
+    <p><strong>Data</strong>:</p>
+
+\[(x_1, y_1), (x_2, y_2), \ldots \in X \times Y\]
+  </li>
+  <li>
+    <p><strong>Assumption:</strong> There is a (relatively simple) function:</p>
+
+\[f^*: X \to Y\]
+
+    <p>such that</p>
+
+\[f^*(\vec{x}_i) = y_i\]
+
+    <p>for most i</p>
+  </li>
+  <li>
+    <p><strong>Learning Task:</strong> Given $n$ examples, find an approximation:</p>
+
+\[\hat{f} \approx f^*\]
+  </li>
+  <li>
+    <p><strong>Goal: It gives mostly correct predictions on unseen examples.</strong></p>
+  </li>
+</ul>
+
+<p>Unsupervised Learning:</p>
+
+<ul>
+  <li>
+    <p><strong>Data</strong>:</p>
+
+\[x_1, x_2, \ldots \in X\]
+  </li>
+  <li><strong>Assumption:</strong> There is underlying strcuture in the data</li>
+  <li><strong>Learning Task:</strong> discover the structure given n examples from the data</li>
+  <li><strong>Goal:</strong> find the summary of the data using the structure</li>
+</ul>
+
+<h3 id="statistical-modeling-approach-for-supervised-learning"><strong>Statistical Modeling Approach for Supervised Learning:</strong></h3>
+
+<ul>
+  <li>
+    <p><strong>Labeled Training Data:</strong></p>
+
+\[(x_i, y_i)\]
+
+    <p>drawn independently from a fixed underlying distribution (i.i.d assumption).</p>
+  </li>
+  <li><strong>Learning Algorithm:</strong> Select $\hat{f}$ from a pool of models F that maximize label agreement of the training data.</li>
+  <li><strong>Selection Methods:</strong> Maximum likelihood, maximum a posteriori, optimization of ‘loss’ criterion.</li>
+</ul>
+
+<h3 id="classification">Classification</h3>
+
+<p>In classification tasks, the task is to build a function that takes in a vector of <strong>features</strong> X(also called “inputs”) and predicts a <strong>label</strong> Y (also called the “class” or “output”). Features are things you know, and the label is what your algorithm is trying to figure out; for example, the label might be a binary variable indicating whether an animal is a cat or a dog, and the features might be the length of the animal’s whiskers, the animal’s weight in pounds, and a binary variable indicating whether the animal’s ears stick up or are droopy. Your algorithm needs to tell dogs and cats apart (Y) using only this information about weight, whiskers, and ears (X).</p>
+
+<p>The classifier</p>
+
+<ul>
+  <li><strong>Joint Input/Output Space:</strong>
+\(X \times Y\)</li>
+  <li><strong>Data Distribution:</strong>
+\(D(X \times Y)\)</li>
+  <li><strong>Classifier:</strong>
+\(f: X \rightarrow Y\)</li>
+  <li><strong>Goal:</strong> Maximize the accuracy of the classifier:
+\(\text{acc}(f) := P_{(x,y)}[f(x) = y] = E_{(x,y)}[1[f(x) = y]]\)</li>
+</ul>
+
+<p>We want a classifier that maximize acc</p>
+
+<h4 id="generative-classifier">Generative Classifier</h4>
+
+<p>A model with form</p>
+
+\[p(x,y)= p(y)p(x\vert y)\]
+
+<p>is called a generative classifier, since it can be used to generate examples x from each class y.</p>
+
+<p>Examples of generative classifier:</p>
+
+<ul>
+  <li>Native Bayes Classifier</li>
+  <li>Gaussian Mixture Model (GMM)</li>
+</ul>
+
+<p><strong>Bayes classifier:</strong></p>
+
+\[f(\vec{x}) = \arg\max_{y \in Y} P[Y = y|X = \vec{x}]\]
+
+<p><strong>Bayes’ Theorem</strong></p>
+
+<p>Bayes’ theorem connects these two concepts:</p>
+
+\[P(Y|X) = \frac{P(X|Y) \cdot P(Y)}{P(X)}\]
+
+<h4 id="discriminative-classifier">Discriminative Classifier</h4>
+
+<p>A model of form</p>
+
+\[p(y \vert x)\]
+
+<p>is classed a discriminative classifier. It works by modeling the decision boundary directly between classes without explicitly computing the joint or conditional probabilities. Instead of modeling how data is generated, discriminative classifiers focus on learning the relationship between the features and the labels.</p>
+
+<p>Examples of discriminative classifier:</p>
+
+<ul>
+  <li>Logistic Regression</li>
+  <li>Support Vector Machines (SVM)</li>
+  <li>Neural Networks</li>
+</ul>
+
+<h4 id="maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE)</h4>
+
+<p>In statistics, <strong>maximum likelihood estimation (MLE)</strong> is a method of estimating the parameters of an assumed probability distribution, given some observed data. This is achieved by maximizing a likelihood function so that, under the assumed statistical model, the observed data is most probable.</p>
+
+\[(\theta|X) := P(X|\theta) = P(\vec{x}_1, \ldots, \vec{x}_n|\theta) = \prod_{i=1}^{n} P(\vec{x}_i|\theta) = \prod_{i=1}^{n} p_{\theta}(\vec{x}_i)\]
+
+\[\hat{\theta}_{\text{MLE}} = \arg\max_{\theta} L(\theta|X) = \arg\max_{\theta} P(X|\theta) = \arg\max_{\theta} \prod_{i=1}^{n} P(\vec{x}_i|\theta) = \arg\max_{\theta} \prod_{i=1}^{n} p_{\theta}(\vec{x}_i)\]
+
+<h4 id="case-study-email-classification-with-bayes-classifier">Case Study: Email Classification with Bayes Classifier</h4>
+
+<p>We want to classify emails as “spam” or “not spam” based on features like the presence of certain words, email length, etc.</p>
+
+<h5 id="data">Data</h5>
+
+<ul>
+  <li><strong>Features (X):</strong> Presence of words (e.g., “free”, “win”, “click”), email length, number of links, etc.</li>
+  <li><strong>Labels (Y):</strong> “spam” or “not spam”</li>
+</ul>
+
+<h5 id="step-1-bayes-classifier">Step 1: Bayes Classifier</h5>
+
+<p>The Bayes classifier aims to find the class y(spam or not spam) that maximizes the posterior probability</p>
+
+\[P(Y = y \mid X = x)\]
+
+<p>which is:</p>
+
+\[f(x) = \arg\max_{y \in \{ \text{spam, not spam} \}} P(Y = y \mid X = x)\]
+
+<p>Using Bayes’ theorem:</p>
+
+\[P(Y = y \mid X = x) = \frac{P(X = x \mid Y = y) \cdot P(Y = y)}{P(X = x)}\]
+
+<p>For classification purposes, we can ignore $P(X = x)$ because it is the same for both classes:</p>
+
+\[f(x) = \arg\max_{y \in \{ \text{spam, not spam} \}} P(X = x \mid Y = y) \cdot P(Y = y)\]
+
+<h5 id="step-2-estimating-probabilities-using-mle">Step 2: Estimating Probabilities Using MLE</h5>
+
+<p><strong>Estimating Prior Probability</strong></p>
+
+\[P(Y = \text{spam}) = \frac{\text{Number of spam emails}}{\text{Total number of emails}}\]
+
+\[P(Y = \text{not spam}) = \frac{\text{Number of not spam emails}}{\text{Total number of emails}}\]
+
+<p><strong>Estimating Likelihood</strong></p>
+
+<p>We assume that the features X(e.g., presence of words) follow a certain distribution. For simplicity, let’s assume that the features are binary (presence or absence of certain words) and follow a Bernoulli distribution.</p>
+
+<p>For each feature $x_i$</p>
+
+\[P(X_i = 1 \mid Y = \text{spam}) = \theta_{i,\text{spam}}\]
+
+\[P(X_i = 0 \mid Y = \text{spam}) = 1 - \theta_{i,\text{spam}}\]
+
+<p>$\theta_{i,\text{spam}}$ that represents the probability of the word being present in a spam email</p>
+
+<p><strong>MLE for Bernoulli Distribution</strong></p>
+
+<p>For a binary feature</p>
+
+\[L(\theta_{i,\text{spam}}) = \prod_{j=1}^{n} \theta_{i,\text{spam}}^{x_{ij}} (1 - \theta_{i,\text{spam}})^{1 - x_{ij}}\]
+
+<p>The log-likelihood is:</p>
+
+\[\log L(\theta_{i,\text{spam}}) = \sum_{j=1}^{n} \left[ x_{ij} \log \theta_{i,\text{spam}} + (1 - x_{ij}) \log (1 - \theta_{i,\text{spam}}) \right]\]
+
+<p>Taking the derivative with respect to</p>
+
+\[\theta_{i,\text{spam}}\]
+
+<p>and setting it to zero:</p>
+
+\[\frac{\partial}{\partial \theta_{i,\text{spam}}} \log L(\theta_{i,\text{spam}}) = \sum_{j=1}^{n} \left[ \frac{x_{ij}}{\theta_{i,\text{spam}}} - \frac{1 - x_{ij}}{1 - \theta_{i,\text{spam}}} \right] = 0\]
+
+<p>Solving for</p>
+
+\[\theta_{i,\text{spam}}\]
+
+\[\hat{\theta}_{i,\text{spam}} = \frac{\sum_{j=1}^{n} x_{ij}}{n}\]
+
+<h5 id="step-3-applying-bayes-classifier-with-mle-estimates"><strong>Step 3: Applying Bayes Classifier with MLE Estimates</strong></h5>
+
+<p>Using the estimated probabilities:</p>
+
+\[f(x) = \arg\max_{y \in \{ \text{spam, not spam} \}} \left( P(X = x \mid Y = y) \cdot P(Y = y) \right)\]
+
+<p>For each class y:</p>
+
+\[P(X = x \mid Y = y) = \prod_{i=1}^{m} \hat{\theta}_{i,y}^{x_i} (1 - \hat{\theta}_{i,y})^{1 - x_i}\]
+
+<h5 id="step-4-selecting-the-predicted-label"><strong>Step 4: Selecting the Predicted Label</strong></h5>
+
+<p>Calculate the posterior probability for each class and select the class with the highest probability:</p>
+
+\[\hat{y} = \arg\max_{y \in { \text{spam, not spam} }} \left( P(X = x_{\text{new}} \mid Y = y) \cdot P(Y = y) \right)\]
+
+            </div>
+          </article>
+        </main>
+
+      </section>
+      <div id="title" style="text-align: center;">
+    
+    <hr>
+    <span class="credits left">Project maintained by <a href=""></a></span>
+    <br>
+    <br>
+    <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href=""></a></span>
+
+    <p>&copy; 2024 Tingaldama. All rights reserved.</p>
+  </div>
+    </div>
+  </body>
+</html>

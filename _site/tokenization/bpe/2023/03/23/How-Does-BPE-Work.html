@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>How Does BPE Tokenization Work | Tingaldama</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="How Does BPE Tokenization Work" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Before we dive into BPE algorithm, lets take a look at Tokenization. Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units. Other types of tokenization based on the level at which the text is split: Word Tokenization Character Tokenization N-gram Tokenizaiton Sentence Tokenization Byte pair encoding (also known as digram coding ) is an algorithm, first described in 1994 by Philip Gage for encoding strings of text into tabular form for use in downstream modeling. Its modification is notable as the large language model tokenizer with an ability to combine both tokens that encode single characters (including single digits or single punctuation marks) and those that encode whole words (even the longest compound words). This modification, in the first step, assumes all unique characters to be an initial set of 1-character long n-grams (i.e. initial “tokens”). Then, successively the most frequent pair of adjacent characters is merged into a new, 2-character long n-gram and all instances of the pair are replaced by this new token. This is repeated until a vocabulary of prescribed size is obtained. Note that new words can always be constructed from final vocabulary tokens and initial-set characters (Wikipedia) Heres a demonstration that how BPE works: The initial tokens and vocab sentence = &#39;Today is such a great day&#39; #split words into characters and mark the end of the words char_tokens = [list(word[:-1]) + [word[-1]] for word in sentence.split()] #Initialize the vocab which consists of the unique chars in the sentence vocab = list(set(char for word in char_tokens for char in word)) The results: #The initial tokens [[&#39;T&#39;, &#39;o&#39;, &#39;d&#39;, &#39;a&#39;, &#39;y&#39;], [&#39;i&#39;, &#39;s&#39;], [&#39;s&#39;, &#39;u&#39;, &#39;c&#39;, &#39;h&#39;], [&#39;a&#39;], [&#39;g&#39;, &#39;r&#39;, &#39;e&#39;, &#39;a&#39;, &#39;t&#39;], [&#39;d&#39;, &#39;a&#39;, &#39;y&#39;]] #The initial vocab [&#39;w&#39;, &#39;d&#39;, &#39;e&#39;, &#39;c&#39;, &#39;w&#39;, &#39;a&#39;, &#39;r&#39;, &#39;T&#39;, &#39;i&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;] Note: nested list was used to sepearete words or can add ‘/w’ to mark the end of the words Interative merging: The tokenizer iteratively merges the most frequent character pairs to form new subword units. In each iteration, the tokenizer identifies the most frequent pair of adjacent characters and merges them into a single token. The merging process continues until the desired vocabulary size is reached or a maximum number of iterations is performed. Lets go through an example: In the previous intial tokens, we find that the most frequent pair: (‘d’, ‘a’) Then we replace ‘d’ and ‘a’ in the initial tokens with ‘da’, and add ‘da’ to the vocab We also update the token frequncy at the end #The first merge [[&#39;T&#39;, &#39;o&#39;, &#39;da&#39;, &#39;y&#39;], [&#39;i&#39;, &#39;s/w&#39;], [&#39;s&#39;, &#39;u&#39;, &#39;c&#39;, &#39;h&#39;], [&#39;a&#39;], [&#39;g&#39;, &#39;r&#39;, &#39;e&#39;, &#39;a&#39;, &#39;t&#39;], [&#39;da&#39;, &#39;y&#39;]] #The updated vocab [ &#39;d&#39;, &#39;e&#39;, &#39;c&#39;, &#39;a&#39;, &#39;h&#39;, &#39;r&#39;, &#39;T&#39;, &#39;y&#39;, &#39;i&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;, &#39;da&#39;] Tokenization: How does the trained model tokenize new sentences Word-level tokenization: The input text is split into individual words. Each word is checked against the learned vocabulary to see if it exists as a complete token. Subword tokenization: If a word is not found in the vocabulary, it is split into subword units. The tokenizer finds the longest subword that exists in the vocabulary and adds it to the list of tokens. The process is repeated for the remaining part of the word until the entire word is tokenized. Handling single characters: If a single character is encountered that is not part of any subword unit, it is added as an individual token. def tokenize(self, text): tokens = [] for word in text.split(): # Step 1: Check if the word exists in the vocabulary if word in self.vocab: tokens.append(word) else: # Step 2: Split the word into subword tokens word_tokens = [] while len(word) &gt; 0: longest_subword = self._find_longest_subword(word) if longest_subword: word_tokens.append(longest_subword) word = word[len(longest_subword):] else: # Step 3: Handle remaining single characters word_tokens.append(word[0]) word = word[1:] tokens.extend(word_tokens) return tokens def _find_longest_subword(self, word): for i in range(len(word), 0, -1): subword = word[:i] if subword in self.vocab: return subword return &#39;&#39; One example: In the previous example, the final vocab is: [ &#39;day&#39;, &#39;e&#39;, &#39;c&#39;, &#39;a&#39;, &#39;h&#39;, &#39;r&#39;, &#39;T&#39;, &#39;y&#39;, &#39;is&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;, &#39;da&#39;] The sentence to be tokenized is: ‘Today is such a good day’ The tokens would be: [&#39;T&#39;, &#39;o&#39;, &#39;day&#39;, &#39;is&#39;, &#39;such&#39;, &#39;a&#39;, &#39;g&#39;, &#39;o&#39;, &#39;o&#39;, &#39;day&#39;] In summary, the Byte Pair Encoding (BPE) algorithm is a subword tokenization technique that aims to create a compact and efficient representation of text by iteratively merging the most frequent character pairs. The BPE tokenizer strikes a balance between word-level and character-level tokenization, creating meaningful subword units that can handle out-of-vocabulary words effectively. By leveraging frequency information during training and tokenization, BPE achieves a compact representation of text while capturing important patterns and reducing the vocabulary size. Overall, the BPE tokenizer is a powerful and widely used technique for subword tokenization, offering a balance between efficiency and expressiveness in representing text for various natural language processing applications." />
+<meta property="og:description" content="Before we dive into BPE algorithm, lets take a look at Tokenization. Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units. Other types of tokenization based on the level at which the text is split: Word Tokenization Character Tokenization N-gram Tokenizaiton Sentence Tokenization Byte pair encoding (also known as digram coding ) is an algorithm, first described in 1994 by Philip Gage for encoding strings of text into tabular form for use in downstream modeling. Its modification is notable as the large language model tokenizer with an ability to combine both tokens that encode single characters (including single digits or single punctuation marks) and those that encode whole words (even the longest compound words). This modification, in the first step, assumes all unique characters to be an initial set of 1-character long n-grams (i.e. initial “tokens”). Then, successively the most frequent pair of adjacent characters is merged into a new, 2-character long n-gram and all instances of the pair are replaced by this new token. This is repeated until a vocabulary of prescribed size is obtained. Note that new words can always be constructed from final vocabulary tokens and initial-set characters (Wikipedia) Heres a demonstration that how BPE works: The initial tokens and vocab sentence = &#39;Today is such a great day&#39; #split words into characters and mark the end of the words char_tokens = [list(word[:-1]) + [word[-1]] for word in sentence.split()] #Initialize the vocab which consists of the unique chars in the sentence vocab = list(set(char for word in char_tokens for char in word)) The results: #The initial tokens [[&#39;T&#39;, &#39;o&#39;, &#39;d&#39;, &#39;a&#39;, &#39;y&#39;], [&#39;i&#39;, &#39;s&#39;], [&#39;s&#39;, &#39;u&#39;, &#39;c&#39;, &#39;h&#39;], [&#39;a&#39;], [&#39;g&#39;, &#39;r&#39;, &#39;e&#39;, &#39;a&#39;, &#39;t&#39;], [&#39;d&#39;, &#39;a&#39;, &#39;y&#39;]] #The initial vocab [&#39;w&#39;, &#39;d&#39;, &#39;e&#39;, &#39;c&#39;, &#39;w&#39;, &#39;a&#39;, &#39;r&#39;, &#39;T&#39;, &#39;i&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;] Note: nested list was used to sepearete words or can add ‘/w’ to mark the end of the words Interative merging: The tokenizer iteratively merges the most frequent character pairs to form new subword units. In each iteration, the tokenizer identifies the most frequent pair of adjacent characters and merges them into a single token. The merging process continues until the desired vocabulary size is reached or a maximum number of iterations is performed. Lets go through an example: In the previous intial tokens, we find that the most frequent pair: (‘d’, ‘a’) Then we replace ‘d’ and ‘a’ in the initial tokens with ‘da’, and add ‘da’ to the vocab We also update the token frequncy at the end #The first merge [[&#39;T&#39;, &#39;o&#39;, &#39;da&#39;, &#39;y&#39;], [&#39;i&#39;, &#39;s/w&#39;], [&#39;s&#39;, &#39;u&#39;, &#39;c&#39;, &#39;h&#39;], [&#39;a&#39;], [&#39;g&#39;, &#39;r&#39;, &#39;e&#39;, &#39;a&#39;, &#39;t&#39;], [&#39;da&#39;, &#39;y&#39;]] #The updated vocab [ &#39;d&#39;, &#39;e&#39;, &#39;c&#39;, &#39;a&#39;, &#39;h&#39;, &#39;r&#39;, &#39;T&#39;, &#39;y&#39;, &#39;i&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;, &#39;da&#39;] Tokenization: How does the trained model tokenize new sentences Word-level tokenization: The input text is split into individual words. Each word is checked against the learned vocabulary to see if it exists as a complete token. Subword tokenization: If a word is not found in the vocabulary, it is split into subword units. The tokenizer finds the longest subword that exists in the vocabulary and adds it to the list of tokens. The process is repeated for the remaining part of the word until the entire word is tokenized. Handling single characters: If a single character is encountered that is not part of any subword unit, it is added as an individual token. def tokenize(self, text): tokens = [] for word in text.split(): # Step 1: Check if the word exists in the vocabulary if word in self.vocab: tokens.append(word) else: # Step 2: Split the word into subword tokens word_tokens = [] while len(word) &gt; 0: longest_subword = self._find_longest_subword(word) if longest_subword: word_tokens.append(longest_subword) word = word[len(longest_subword):] else: # Step 3: Handle remaining single characters word_tokens.append(word[0]) word = word[1:] tokens.extend(word_tokens) return tokens def _find_longest_subword(self, word): for i in range(len(word), 0, -1): subword = word[:i] if subword in self.vocab: return subword return &#39;&#39; One example: In the previous example, the final vocab is: [ &#39;day&#39;, &#39;e&#39;, &#39;c&#39;, &#39;a&#39;, &#39;h&#39;, &#39;r&#39;, &#39;T&#39;, &#39;y&#39;, &#39;is&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;, &#39;da&#39;] The sentence to be tokenized is: ‘Today is such a good day’ The tokens would be: [&#39;T&#39;, &#39;o&#39;, &#39;day&#39;, &#39;is&#39;, &#39;such&#39;, &#39;a&#39;, &#39;g&#39;, &#39;o&#39;, &#39;o&#39;, &#39;day&#39;] In summary, the Byte Pair Encoding (BPE) algorithm is a subword tokenization technique that aims to create a compact and efficient representation of text by iteratively merging the most frequent character pairs. The BPE tokenizer strikes a balance between word-level and character-level tokenization, creating meaningful subword units that can handle out-of-vocabulary words effectively. By leveraging frequency information during training and tokenization, BPE achieves a compact representation of text while capturing important patterns and reducing the vocabulary size. Overall, the BPE tokenizer is a powerful and widely used technique for subword tokenization, offering a balance between efficiency and expressiveness in representing text for various natural language processing applications." />
+<link rel="canonical" href="http://localhost:4000/tingaldama/tokenization/bpe/2023/03/23/How-Does-BPE-Work.html" />
+<meta property="og:url" content="http://localhost:4000/tingaldama/tokenization/bpe/2023/03/23/How-Does-BPE-Work.html" />
+<meta property="og:site_name" content="Tingaldama" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-23T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="How Does BPE Tokenization Work" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-03-23T00:00:00+01:00","datePublished":"2023-03-23T00:00:00+01:00","description":"Before we dive into BPE algorithm, lets take a look at Tokenization. Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units. Other types of tokenization based on the level at which the text is split: Word Tokenization Character Tokenization N-gram Tokenizaiton Sentence Tokenization Byte pair encoding (also known as digram coding ) is an algorithm, first described in 1994 by Philip Gage for encoding strings of text into tabular form for use in downstream modeling. Its modification is notable as the large language model tokenizer with an ability to combine both tokens that encode single characters (including single digits or single punctuation marks) and those that encode whole words (even the longest compound words). This modification, in the first step, assumes all unique characters to be an initial set of 1-character long n-grams (i.e. initial “tokens”). Then, successively the most frequent pair of adjacent characters is merged into a new, 2-character long n-gram and all instances of the pair are replaced by this new token. This is repeated until a vocabulary of prescribed size is obtained. Note that new words can always be constructed from final vocabulary tokens and initial-set characters (Wikipedia) Heres a demonstration that how BPE works: The initial tokens and vocab sentence = &#39;Today is such a great day&#39; #split words into characters and mark the end of the words char_tokens = [list(word[:-1]) + [word[-1]] for word in sentence.split()] #Initialize the vocab which consists of the unique chars in the sentence vocab = list(set(char for word in char_tokens for char in word)) The results: #The initial tokens [[&#39;T&#39;, &#39;o&#39;, &#39;d&#39;, &#39;a&#39;, &#39;y&#39;], [&#39;i&#39;, &#39;s&#39;], [&#39;s&#39;, &#39;u&#39;, &#39;c&#39;, &#39;h&#39;], [&#39;a&#39;], [&#39;g&#39;, &#39;r&#39;, &#39;e&#39;, &#39;a&#39;, &#39;t&#39;], [&#39;d&#39;, &#39;a&#39;, &#39;y&#39;]] #The initial vocab [&#39;w&#39;, &#39;d&#39;, &#39;e&#39;, &#39;c&#39;, &#39;w&#39;, &#39;a&#39;, &#39;r&#39;, &#39;T&#39;, &#39;i&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;] Note: nested list was used to sepearete words or can add ‘/w’ to mark the end of the words Interative merging: The tokenizer iteratively merges the most frequent character pairs to form new subword units. In each iteration, the tokenizer identifies the most frequent pair of adjacent characters and merges them into a single token. The merging process continues until the desired vocabulary size is reached or a maximum number of iterations is performed. Lets go through an example: In the previous intial tokens, we find that the most frequent pair: (‘d’, ‘a’) Then we replace ‘d’ and ‘a’ in the initial tokens with ‘da’, and add ‘da’ to the vocab We also update the token frequncy at the end #The first merge [[&#39;T&#39;, &#39;o&#39;, &#39;da&#39;, &#39;y&#39;], [&#39;i&#39;, &#39;s/w&#39;], [&#39;s&#39;, &#39;u&#39;, &#39;c&#39;, &#39;h&#39;], [&#39;a&#39;], [&#39;g&#39;, &#39;r&#39;, &#39;e&#39;, &#39;a&#39;, &#39;t&#39;], [&#39;da&#39;, &#39;y&#39;]] #The updated vocab [ &#39;d&#39;, &#39;e&#39;, &#39;c&#39;, &#39;a&#39;, &#39;h&#39;, &#39;r&#39;, &#39;T&#39;, &#39;y&#39;, &#39;i&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;, &#39;da&#39;] Tokenization: How does the trained model tokenize new sentences Word-level tokenization: The input text is split into individual words. Each word is checked against the learned vocabulary to see if it exists as a complete token. Subword tokenization: If a word is not found in the vocabulary, it is split into subword units. The tokenizer finds the longest subword that exists in the vocabulary and adds it to the list of tokens. The process is repeated for the remaining part of the word until the entire word is tokenized. Handling single characters: If a single character is encountered that is not part of any subword unit, it is added as an individual token. def tokenize(self, text): tokens = [] for word in text.split(): # Step 1: Check if the word exists in the vocabulary if word in self.vocab: tokens.append(word) else: # Step 2: Split the word into subword tokens word_tokens = [] while len(word) &gt; 0: longest_subword = self._find_longest_subword(word) if longest_subword: word_tokens.append(longest_subword) word = word[len(longest_subword):] else: # Step 3: Handle remaining single characters word_tokens.append(word[0]) word = word[1:] tokens.extend(word_tokens) return tokens def _find_longest_subword(self, word): for i in range(len(word), 0, -1): subword = word[:i] if subword in self.vocab: return subword return &#39;&#39; One example: In the previous example, the final vocab is: [ &#39;day&#39;, &#39;e&#39;, &#39;c&#39;, &#39;a&#39;, &#39;h&#39;, &#39;r&#39;, &#39;T&#39;, &#39;y&#39;, &#39;is&#39;, &#39;o&#39;, &#39;s&#39;, &#39;g&#39;, &#39;u&#39;, &#39;da&#39;] The sentence to be tokenized is: ‘Today is such a good day’ The tokens would be: [&#39;T&#39;, &#39;o&#39;, &#39;day&#39;, &#39;is&#39;, &#39;such&#39;, &#39;a&#39;, &#39;g&#39;, &#39;o&#39;, &#39;o&#39;, &#39;day&#39;] In summary, the Byte Pair Encoding (BPE) algorithm is a subword tokenization technique that aims to create a compact and efficient representation of text by iteratively merging the most frequent character pairs. The BPE tokenizer strikes a balance between word-level and character-level tokenization, creating meaningful subword units that can handle out-of-vocabulary words effectively. By leveraging frequency information during training and tokenization, BPE achieves a compact representation of text while capturing important patterns and reducing the vocabulary size. Overall, the BPE tokenizer is a powerful and widely used technique for subword tokenization, offering a balance between efficiency and expressiveness in representing text for various natural language processing applications.","headline":"How Does BPE Tokenization Work","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tingaldama/tokenization/bpe/2023/03/23/How-Does-BPE-Work.html"},"url":"http://localhost:4000/tingaldama/tokenization/bpe/2023/03/23/How-Does-BPE-Work.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/tingaldama/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/tingaldama/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/tingaldama/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#353535">
+<meta name="msapplication-navbutton-color" content="#353535">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/tingaldama/favicon.ico" -->
+
+<!-- end custom head snippets -->
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<link rel="shortcut icon" href="/tingaldama//assets/images/favicon.jpg" type="image/x-icon">
+
+
+  </head>
+  <style>
+    .categories{
+  font-weight: bold;
+  color: #949494;
+}
+ .date{
+  font-weight: bold !important;
+  color: #949494 !important;
+}
+
+  </style>
+  <body>
+    
+<div id="header">
+    <nav>
+      <ul>
+        <li class="fork"><a href="/tingaldama/">Home</a></li>
+        <li class="downloads"><a href="/tingaldama/contact">Contacts</a></li>
+        <li class="downloads"><a href="/tingaldama/about">About</a></li>
+        <li class="downloads"><a href="/tingaldama/blog">Blogs</a></li>
+        <li class="downloads"><a href="/tingaldama/mlps-resources">MLOps Resources</a></li>
+        <li class="downloads"><a href="/tingaldama/personal-growth">Personal Growth</a></li>
+          
+      </ul>
+    </nav>
+  </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        
+
+        <main>
+          <article>
+            <h1>How Does BPE Tokenization Work</h1>
+            <div class="post-meta">
+             <span class="date">Date: March 23, 2023</span>
+      <br>
+      <span class="categories">
+        Categories: tokenization | BPE
+      </span>
+            </div>
+            <br>
+            <div class="post-content">
+              
+              <p>Before we dive into BPE algorithm, lets take a look at Tokenization. Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units.</p>
+
+<p>Other types of tokenization based on the level at which the text is split:</p>
+
+<ol>
+  <li>Word Tokenization</li>
+  <li>Character Tokenization</li>
+  <li>N-gram Tokenizaiton</li>
+  <li>Sentence Tokenization</li>
+</ol>
+
+<hr />
+
+<p><strong>Byte pair encoding</strong>  (also known as  <strong>digram coding</strong> ) is an algorithm, first described in 1994 by Philip Gage for encoding strings of text into tabular form for use in downstream modeling. Its modification is notable as the <a href="https://en.wikipedia.org/wiki/Large_language_model" title="Large language model">large language model</a> tokenizer with an ability to combine both tokens that encode single characters (including single digits or single punctuation marks) and those that encode whole words (even the longest compound words). This modification, in the first step, assumes all unique characters to be an initial set of 1-character long <a href="https://en.wikipedia.org/wiki/N-grams" title="N-grams">n-grams</a> (i.e. initial “tokens”). Then, successively the most frequent pair of adjacent characters is merged into a new, 2-character long n-gram and all instances of the pair are replaced by this new token. This is repeated until a vocabulary of prescribed size is obtained. Note that new words can always be constructed from final vocabulary tokens and initial-set characters (Wikipedia)</p>
+
+<p>Heres a demonstration that how BPE works:</p>
+
+<h3 id="the-initial-tokens-and-vocab">The initial tokens and vocab</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sentence</span> <span class="o">=</span> <span class="sh">'</span><span class="s">Today is such a great day</span><span class="sh">'</span>
+<span class="c1">#split words into characters and mark the end of the words 
+</span><span class="n">char_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="nf">list</span><span class="p">(</span><span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="p">[</span><span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sentence</span><span class="p">.</span><span class="nf">split</span><span class="p">()]</span>
+<span class="c1">#Initialize the vocab which consists of the unique chars in the sentence
+</span><span class="n">vocab</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">char</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">char_tokens</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">word</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>The results:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#The initial tokens
+</span><span class="p">[[</span><span class="sh">'</span><span class="s">T</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">o</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">d</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">y</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">i</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">s</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">s</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">u</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">c</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">h</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">g</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">t</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">d</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">y</span><span class="sh">'</span><span class="p">]]</span>
+
+<span class="c1">#The initial vocab
+</span><span class="p">[</span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">d</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">c</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">T</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">i</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">o</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">s</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">g</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">u</span><span class="sh">'</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<p><em>Note: nested list was used to sepearete words or can add ‘/w’ to mark the end of the words</em></p>
+
+<h3 id="interative-merging">Interative merging:</h3>
+
+<ul>
+  <li>The tokenizer iteratively merges the most frequent character pairs to form new subword units.</li>
+  <li>In each iteration, the tokenizer identifies the most frequent pair of adjacent characters and merges them into a single token.</li>
+  <li>The merging process continues until the desired vocabulary size is reached or a maximum number of iterations is performed.</li>
+</ul>
+
+<p>Lets go through an example:</p>
+
+<p>In the previous intial tokens, we find that the most frequent pair: (‘d’, ‘a’)</p>
+
+<p>Then we replace ‘d’ and ‘a’ in the initial tokens with ‘da’, and add ‘da’ to the vocab</p>
+
+<p>We also update the token frequncy at the end</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#The first merge
+</span><span class="p">[[</span><span class="sh">'</span><span class="s">T</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">o</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">da</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">y</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">i</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">s/w</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">s</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">u</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">c</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">h</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">g</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">t</span><span class="sh">'</span><span class="p">],</span> <span class="p">[</span><span class="sh">'</span><span class="s">da</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">y</span><span class="sh">'</span><span class="p">]]</span>
+
+<span class="c1">#The updated vocab 
+</span><span class="p">[</span> <span class="sh">'</span><span class="s">d</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">c</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">h</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">T</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">y</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">i</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">o</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">s</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">g</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">u</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">da</span><span class="sh">'</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<h3 id="tokenization">Tokenization:</h3>
+
+<p>How does the trained model tokenize new sentences</p>
+
+<ul>
+  <li>
+    <p>Word-level tokenization:</p>
+
+    <ul>
+      <li>The input text is split into individual words.</li>
+      <li>Each word is checked against the learned vocabulary to see if it exists as a complete token.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Subword tokenization:</p>
+
+    <ul>
+      <li>If a word is not found in the vocabulary, it is split into subword units.</li>
+      <li>The tokenizer finds the longest subword that exists in the vocabulary and adds it to the list of tokens.</li>
+      <li>The process is repeated for the remaining part of the word until the entire word is tokenized.</li>
+      <li>
+        <p>Handling single characters:</p>
+
+        <ul>
+          <li>If a single character is encountered that is not part of any subword unit, it is added as an individual token.</li>
+        </ul>
+
+        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">text</span><span class="p">.</span><span class="nf">split</span><span class="p">():</span>
+            <span class="c1"># Step 1: Check if the word exists in the vocabulary
+</span>            <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">vocab</span><span class="p">:</span>
+                <span class="n">tokens</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Step 2: Split the word into subword tokens
+</span>                <span class="n">word_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">while</span> <span class="nf">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">longest_subword</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_find_longest_subword</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">longest_subword</span><span class="p">:</span>
+                        <span class="n">word_tokens</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">longest_subword</span><span class="p">)</span>
+                        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="nf">len</span><span class="p">(</span><span class="n">longest_subword</span><span class="p">):]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Step 3: Handle remaining single characters
+</span>                        <span class="n">word_tokens</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">tokens</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">word_tokens</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokens</span>
+
+
+<span class="k">def</span> <span class="nf">_find_longest_subword</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">word</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">subword</span> <span class="o">=</span> <span class="n">word</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">subword</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">vocab</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">subword</span>
+        <span class="k">return</span> <span class="sh">''</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>One example:</p>
+
+<p>In the previous example, the final vocab is: <code class="language-plaintext highlighter-rouge">[ 'day', 'e', 'c', 'a', 'h', 'r', 'T', 'y', 'is', 'o', 's', 'g', 'u', 'da']</code></p>
+
+<p>The sentence to be tokenized is: ‘Today is such a good day’</p>
+
+<p>The tokens would be: <code class="language-plaintext highlighter-rouge">['T', 'o', 'day', 'is', 'such', 'a', 'g', 'o', 'o', 'day']</code></p>
+
+<p>In summary, the Byte Pair Encoding (BPE) algorithm is a subword tokenization technique that aims to create a compact and efficient representation of text by iteratively merging the most frequent character pairs. The BPE tokenizer strikes a balance between word-level and character-level tokenization, creating meaningful subword units that can handle out-of-vocabulary words effectively. By leveraging frequency information during training and tokenization, BPE achieves a compact representation of text while capturing important patterns and reducing the vocabulary size. Overall, the BPE tokenizer is a powerful and widely used technique for subword tokenization, offering a balance between efficiency and expressiveness in representing text for various natural language processing applications.</p>
+
+            </div>
+          </article>
+        </main>
+
+      </section>
+      <div id="title" style="text-align: center;">
+    
+    <hr>
+    <span class="credits left">Project maintained by <a href=""></a></span>
+    <br>
+    <br>
+    <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href=""></a></span>
+
+    <p>&copy; 2024 Tingaldama. All rights reserved.</p>
+  </div>
+    </div>
+  </body>
+</html>

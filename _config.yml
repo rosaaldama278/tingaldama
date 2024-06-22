@@ -16,3 +16,7 @@ defaults:
       layout: "post"
 
 excerpt_separator: <!--more-->
+
+exclude:
+  - _site
+
