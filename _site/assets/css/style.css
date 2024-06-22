@@ -882,7 +882,13 @@ section #title .credits.right {
     margin-top: 0px;
   }
   section {
-    margin-top: 40px;
+    margin-top: 100px;
+    padding-left: 0px !important;
+  }
+  .container-content {
+    max-width: 100%;
+    padding: 55px 0px 20px 0px !important;
+    margin: 20px 0;
   }
 }
 
