@@ -2,3 +2,31 @@
 ---
 
 @import "jekyll-theme-midnight";
+
+
+.wrapper h3{
+    margin-left: 40px ;
+    font-size: 23px;
+}
+.wrapper h1{
+    margin: 0px 0px 20px 40px;
+}
+.container-content h1{
+    margin-left: 40px;
+}
+
+@media screen and (max-width: 480px) {
+    .wrapper h3{
+        margin-left: 0px ;
+        font-size: 17px;
+    }
+    .container-content h1{
+        margin-left: 0px;
+    }
+    .wrapper ul{
+        padding: 10px 0px 0px 0px !important;
+    }
+    .wrapper h1 {
+        margin: 0px 0px 20px 0px;
+    }
+}
