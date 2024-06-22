@@ -28,16 +28,42 @@
                 flex-direction: row;
                 display: flex;
                 justify-content: space-around;
-                margin-bottom: 30px;
+                margin-top: -25px;
+                margin-bottom: 120px;
             }
             .header-flex h1{
                 flex: 50%
             }
             .header-flex img{
                 flex: 1%;
-                width: 50px;
-                height: auto;
+                width: 150px;
+                height: 150px;
                 border-radius: 50% !important;
+                position: absolute;
+                margin-left: 400px;
+                object-fit: cover;
+            }
+            @media screen and (max-width: 480px) {
+              .header-flex{
+                flex-direction: row;
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 40px;
+            }
+            .header-flex h1{
+                flex: 50%;
+                margin-top: 35px;
+            }
+            .header-flex img{
+                flex: 1%;
+                width: 80px;
+                height: 80px;
+                border-radius: 50% !important;
+                position: absolute;
+                margin-left: 180px;
+                object-fit: cover;
+                margin-top: 15px;
+            }
             }
           </style>
         <main>
