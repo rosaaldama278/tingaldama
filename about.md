@@ -3,7 +3,8 @@ layout: about
 title: About Me 😊
 permalink: about
 ---
-## Hello! I'm Ting Aldama, Welcome to my blog!  ❤️🔥
+## Hello! I'm Rosa(Ting) Aldama, Welcome to my blog!  ❤️🔥
+
 <br>
 ### Background 🎓
 
@@ -40,8 +41,8 @@ In my free time, I enjoy doing yoga 🧘‍♀️and exploring new technologies 
 
 Have a burning question about my blog? 🔥 Or maybe you just want to chat about machine learning 🤖, life 🌍, the universe 🌌, and everything in between? Feel free to reach out!
 
-You can drop me a line at <a href="mailto:tingaldama278@gmail.com">tingaldama278@gmail.com</a> 📧, and I'll get back to you as soon as possible. Your thoughts, ideas, and feedback are always welcome!
+You can drop me a line at `<a href="mailto:tingaldama278@gmail.com">`tingaldama278@gmail.com`</a>` 📧, and I'll get back to you as soon as possible. Your thoughts, ideas, and feedback are always welcome!
 
 📍 Location: San Jose, CA 95134
-        
+
 Let's connect and delve into the fascinating world of machine learning and beyond! 🚀
