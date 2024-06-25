@@ -3,9 +3,6 @@ layout: about
 title: About Me 😊
 permalink: about
 ---
-## Hello! I'm Rosa(Ting) Aldama, Welcome to my blog!  ❤️🔥
-
-<br>
 ### Background 🎓
 
 I hold a Master's degree in Computer Science with a specialization in Machine Learning from Columbia University. I have extensive experience in building ML model with ML modeling frameworks (PyTorch, Tensorflow)  and cloud data processing technologies and frameworks such as Apache Spark, SQL, etc. as a data analyst before my graduate study 📚
@@ -41,7 +38,7 @@ In my free time, I enjoy doing yoga 🧘‍♀️and exploring new technologies 
 
 Have a burning question about my blog? 🔥 Or maybe you just want to chat about machine learning 🤖, life 🌍, the universe 🌌, and everything in between? Feel free to reach out!
 
-You can drop me a line at `<a href="mailto:tingaldama278@gmail.com">`tingaldama278@gmail.com`</a>` 📧, and I'll get back to you as soon as possible. Your thoughts, ideas, and feedback are always welcome!
+You can drop me a line at `<a href="mailto:tingaldama278@gmail.com">`tingaldama278@gmail.com `</a>` 📧, and I'll get back to you as soon as possible. Your thoughts, ideas, and feedback are always welcome!
 
 📍 Location: San Jose, CA 95134
 

@@ -1,10 +1,10 @@
 ---
 title: "Dimensionality Reduction"
 date: 2023-03-10
-summary: Tokenization is the process of breaking down text into smaller units called tokens. In the context of the Byte Pair Encoding (BPE) algorithm, tokenization involves splitting words into subword units based on a learned vocabulary. The BPE tokenizer aims to find a balance between representing the text with a limited vocabulary size while still capturing meaningful subword units.
+summary: This post provides an in-depth explanation of Principal Component Analysis (PCA), a dimensionality reduction technique commonly used in data analysis.
 categories:
-   - tokenization
-   - BPE
+   - PCA
+   - Dimension reduction
 ---
 ## PCA (Principle Components Analysis)
 
@@ -12,11 +12,7 @@ PCA (Principal Component Analysis) is a common data analysis method, often used 
 
 **Linear transformation:**
 
-Transformations are easier to understand by visualizing points on a grid moving to new locations.
-
-matrix-vector multiplication: Linear transformations in 2D can be described using matrices. The columns of a matrix represent where the basis vectors (ii**i**-hat and jj**j**-hat) land after transformation.To find where any vector lands after transformation, express it as a combination of the basis vectors and track where those basis vectors land.
-
-Matrices represent linear transformations by showing where the basis vectors land. Those are very important perspective of thinking linear transformation which helps us understand PCA.
+Linear transformations are used to transform the original data points into a new coordinate system. The transformation matrix, often denoted as P, represents this change of basis. Each column of the transformation matrix corresponds to a new basis vector in the transformed space, which are the eigenvectors of the covariance matrix in PCA.
 
 **Maximum Seperability:**
 
@@ -67,8 +63,9 @@ $$
 
 From the covariance matrix, we can generalize the situaton. Suppose we have m n-dimensional data records, arrange them into matrix $\mathbf{X}$, and let $\mathbf{C}=\frac{1}{m}\mathbf{X}\mathbf{X}^T$, then C is a symmetric matrix, whose diagonal corresponds to the variances of each variable, and the elements in the i-th row and j-th column and the j-th row and i-th column are the same, representing the covariance of variables i and j.
 
-
 ***Calculate Eigenvalues and Eigenvectors*:**
+
+**When we treat the covariance matrix as a linear transformation, the eigenvectors of this matrix define the new basis vectors of the transformed space. These eigenvectors are the principal components that we seek in PCA.**
 
 - Solve the eigenvalue problem for the covariance matrix $C$:
   $$
@@ -157,8 +154,6 @@ Step 5: Project the data
   where $\mathbf{Y}$ is an n x k matrix representing the transformed dataset in the new basis.
 
 The resulting matrix $\mathbf{Y}$ contains the transformed dataset with n samples and k features, where each feature corresponds to a principal component. The first principal component (first column of $\mathbf{Y}$) captures the most variance, the second principal component (second column of $\mathbf{Y}$) captures the second-most variance, and so on.
-
-## LDA
 
 ## PCA vs LDA
 

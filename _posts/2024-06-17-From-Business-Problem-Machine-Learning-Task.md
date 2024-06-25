@@ -8,6 +8,10 @@ categories:
 ---
 ## Is ML is the Right Approach?
 
+Planning 
+
+An example which i read from the book 'Machine Learning Engineering in Action' really illustrate this well. The example underscores the importance of precise project planning in preventing the development of overly complex solutions when a simpler one would suffice. A key illustration provided is when a data scientist, initially thinking they need to implement an advanced machine learning model to enhance email marketing effectiveness, discovers through careful questioning that the actual requirement is much simpler. Instead of building a content recommendation system or designing NLP-driven subject lines, the real solution needed is a straightforward analytics query. By identifying the users' time zones based on IP geolocation, the company can optimize email send times to increase open rates. This example highlights how proper initial planning can save significant resources by identifying the simplest effective solution to the business problem.
+
 **A Good ML Project:**
 
 High-Impact:
