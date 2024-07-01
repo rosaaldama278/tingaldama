@@ -6,12 +6,13 @@ categories:
    - attention mechanism 
    - LLMs
 ---
-## Timeline of attention mechanism
+## Timeline of Attention Mechanism
 
 1. Early 1990s:
 
-   - The concept of "attention" was introduced in the context of computer vision and neural network research.
-   - Researchers explored the idea of selectively focusing on specific parts of an input image or sequence.
+   The concept of "attention" was introduced in the context of computer vision and neural network research.
+
+   Researchers explored the idea of selectively focusing on specific parts of an input image or sequence.
 2. 2014:
 
    - Bahdanau et al. introduced the concept of "attention" in the context of neural machine translation (NMT) in their paper "Neural Machine Translation by Jointly Learning to Align and Translate."
